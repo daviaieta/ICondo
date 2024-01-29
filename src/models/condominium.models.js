@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('./conn.models')
 
-const Condominios = db.define('condominios', {
+const Condominium = db.define('condominios', {
      id_condominio: {
           type: Sequelize.INTEGER,
           primaryKey: true,
@@ -43,12 +43,12 @@ const Condominios = db.define('condominios', {
 }
 )
 
-Condominios.sync({ alter: true })
-     .then(() => {
-          console.log('Tabela Criada com sucesso')
-     })
-     .catch(erro => {
-          console.log('Erro ao criar a tabela: ' + erro)
-     })
+// Condominium.sync({ alter: true })
+//      .then(() => {
+//           console.log('Tabela Criada com sucesso')
+//      })
+//      .catch(erro => {
+//           console.log('Erro ao criar a tabela: ' + erro)
+//      })
 
-module.exports = Condominios
+module.exports = Condominium
