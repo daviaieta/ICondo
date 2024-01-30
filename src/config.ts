@@ -5,6 +5,7 @@ import path from 'path'
 const configApp = (app: any): void => {
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.use('/public', express.static(path.join(__dirname, '../src/public')))
 
   const handlebars = exphbs.create({
     defaultLayout: 'main',

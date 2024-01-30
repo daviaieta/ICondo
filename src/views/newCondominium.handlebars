@@ -1,0 +1,115 @@
+<div class="app-content content">
+  <div class="content-wrapper">
+    <div class="content-header row mb-1">
+      <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+        <h3 class="content-header-title mb-0 d-inline-block">Condomínios</h3>
+        <div class="row breadcrumbs-top d-inline-block">
+          <div class="breadcrumb-wrapper col-12">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item active">Novo
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-body">
+      <form action="/condominiums/new" method="post">
+        <div class="form-group">
+            <label for="razao_social" class="form-label">Razão Social:</label>
+            <input type="text" class="form-control" id="razao_social" name="razao_social" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="logradouro" class="form-label">Logradouro:</label>
+            <input type="text" class="form-control" id="logradouro" name="logradouro" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="numend" class="form-label">Numero de Endereço:</label>
+            <input type="text" class="form-control" id="numend" name="numend" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="complend" class="form-label">Complemento:</label>
+            <input type="text" class="form-control" id="complend" name="complend" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="bairro" class="form-label">Bairro:</label>
+            <input type="text" class="form-control" id="bairro" name="bairro" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="cidade" class="form-label">Cidade:</label>
+            <input type="text" class="form-control" id="cidade" name="cidade" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="uf" class="form-label">Unidade Federativa:</label>
+            <select class="form-control .select2" required>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+            </select>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="cep" class="form-label">CEP:</label>
+            <input type="text" class="form-control" id="cep" name="cep" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="telefone" class="form-label">Telefone:</label>
+            <input type="text" class="form-control" id="telefone" name="telefone" required>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="cnpj" class="form-label">CNPJ:</label>
+            <input type="text" class="form-control" id="cnpj" name="cnpj" required>
+            <br>
+        </div>
+
+        <div class="d-grid gap-2 center">
+          <button type="submit" class="btn btn-secondary">Cadastrar</button>
+        </div>
+
+        <br>
+      </form>
+    </div>
+</div>

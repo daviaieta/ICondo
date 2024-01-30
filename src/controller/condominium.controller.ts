@@ -7,7 +7,7 @@ export class CondominiumController {
             const condominiums = await Condominium.findAll()
             return res.render('condominiums', { condominiums })
         } catch(error){
-            return res.status(500).json({error: error})
+            return res.status(500).json({ error: error })
         }
     }
 
@@ -18,9 +18,11 @@ export class CondominiumController {
             } catch(error){
                 return res.status(500).json({error: error})
             }
-        }else{
-            const {razao_social, logradouro, numend, complend,
-                bairro, cidade, uf, cep, telefone, cnpj} = req.body
+        }
+
+        else{
+            const { razao_social, logradouro, numend, complend,
+                bairro, cidade, uf, cep, telefone, cnpj } = req.body
             try{
                 await Condominium.create({
                     razao_social: razao_social,
@@ -34,8 +36,9 @@ export class CondominiumController {
                     telefone: telefone,
                     cnpj: cnpj
                 })
+                return res.redirect('/condominiums')
             } catch(error){
-                return res.status(500).json({error: error})
+                return res.status(500).json({ error: error })
             }
         }
     }
