@@ -44,20 +44,21 @@ export class CondominiumController {
     }
 
     static async deleteCondominium(req: Request, res: Response) {
+        const condominiumID = req.params.id
         if(req.method == 'GET'){
             try{
-                return res.render('condominiums/deleteCondominium')
+                return res.render('condominiums/deleteCondominium', { condominiumID })
             } catch(error){
                 return res.status(500).json({ error: error })
             }
         } 
 
         else{
-            const condominiumID = req.params.id
             try{
                 await Condominium.destroy({
                     where: {id_condominio: condominiumID}
                 })
+                return res.redirect('/condominiums')
             } catch(error){
                 return res.status(500).json({ error: error })
             } 
