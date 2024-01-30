@@ -5,7 +5,7 @@ export class CondominiumController {
     static async listCondominium(req: Request, res: Response) {
         try{
             const condominiums = await Condominium.findAll()
-            return res.render('condominiums', { condominiums })
+            return res.render('condominiums/condominiums', { condominiums })
         } catch(error){
             return res.status(500).json({ error: error })
         }
@@ -14,7 +14,7 @@ export class CondominiumController {
     static async createCondominium(req: Request, res: Response){
         if(req.method == 'GET'){
             try{
-                return res.render('newCondominium')
+                return res.render('condominiums/newCondominium')
             } catch(error){
                 return res.status(500).json({error: error})
             }
@@ -42,4 +42,26 @@ export class CondominiumController {
             }
         }
     }
+
+    static async deleteCondominium(req: Request, res: Response) {
+        if(req.method == 'GET'){
+            try{
+                return res.render('condominiums/deleteCondominium')
+            } catch(error){
+                return res.status(500).json({ error: error })
+            }
+        } 
+
+        else{
+            const condominiumID = req.params.id
+            try{
+                await Condominium.destroy({
+                    where: {id_condominio: condominiumID}
+                })
+            } catch(error){
+                return res.status(500).json({ error: error })
+            } 
+        }
+    }
+
 }
