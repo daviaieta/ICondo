@@ -2,4 +2,4 @@
 <p>Criado com intuito de solucionar o problema de recebimento e protocolamento de entregas.</p>
 <hr>
 <h2>Tecnologias:</h2>
-<p>Javascript / Typescript / Nodejs / Express / Bootstrap</p>
+<p>Javascript / Typescript / Nodejs Express / Bootstrap</p>
