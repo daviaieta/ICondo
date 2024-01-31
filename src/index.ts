@@ -1,13 +1,13 @@
 import express from 'express'
 import configApp from './config'
 import condominiumRoutes from './routes/condominium.router' 
+import unitsRoutes from './routes/units.routes' 
 
 const app = express()
 configApp(app)
 
-// Condominium Routes
 app.use('/condominiums', condominiumRoutes)
-
+app.use('/units', unitsRoutes)
 
 const PORT = 3000
 app.listen(PORT, () => {
