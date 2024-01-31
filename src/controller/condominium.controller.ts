@@ -21,16 +21,16 @@ export class CondominiumController {
         }
 
         else{
-            const { razao_social, logradouro, numend, complend,
-                bairro, cidade, uf, cep, telefone, cnpj } = req.body
+            const { razao_social, logradouro, numend, complemento,
+                bairro, localidade, uf, cep, telefone, cnpj } = req.body
             try{
                 await Condominium.create({
                     razao_social: razao_social,
                     logradouro: logradouro,
                     numend: numend,
-                    complend: complend,
+                    complemento: complemento,
                     bairro: bairro,
-                    cidade: cidade,
+                    localidade: localidade,
                     uf: uf,
                     cep: cep,
                     telefone: telefone,

@@ -17,20 +17,20 @@ const Condominium = db.define('condominios', {
      numend: {
           type: Sequelize.STRING
      },
-     complend: {
+     complemento: {
           type: Sequelize.STRING
      },
      bairro: {
           type: Sequelize.STRING
      },
-     cidade: {
+     localidade: {
           type: Sequelize.STRING
      },
      uf: {
           type: Sequelize.STRING
      },
      cep: {
-          type: Sequelize.INTEGER
+          type: Sequelize.STRING
      },
      telefone: {
           type: Sequelize.STRING
@@ -45,7 +45,7 @@ const Condominium = db.define('condominios', {
 
 // Condominium.sync({ alter: true })
 //      .then(() => {
-//           console.log('Tabela Criada com sucesso')
+//           console.log('Tabela Criada ou Alterada com sucesso')
 //      })
 //      .catch(erro => {
 //           console.log('Erro ao criar a tabela: ' + erro)
