@@ -44,7 +44,7 @@ export class CondominiumController {
     }
 
     static async deleteCondominium(req: Request, res: Response) {
-        const condominiumID = req.params.id
+        let condominiumID = req.params.id
         if(req.method == 'GET'){
             try{
                 return res.render('condominiums/deleteCondominium', { condominiumID })

@@ -6,7 +6,7 @@ const Condominium = db.define('condominios', {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true,
-          allowNull: false
+          allowNull: false,
      },
      razao_social: {
           type: Sequelize.STRING
