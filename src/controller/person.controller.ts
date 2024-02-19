@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import Person from '../models/person.models'
 import Unit from "../models/unit.models"
+import Condominium from '../models/condominium.models'
 import bcrypt from 'bcrypt'
 
 export class PersonController{
@@ -13,10 +14,11 @@ export class PersonController{
         }
     }
     static async createPerson(req: Request, res: Response){
-        if(req.method == 'get'){
+        if(req.method == 'GET'){
             try{
                 const units = await Unit.findAll()
-                return res.render('people/create', { units })
+                const condominiums = await Condominium.findAll()
+                return res.render('people/create', { units, condominiums })
             }catch(error){
                 return res.status(500).json({ error: error })
             }
@@ -24,24 +26,25 @@ export class PersonController{
         
         else{
             const {
-                nome, sobrenome, data_nascimento, cpf,
-                telefone, email, operador, administrador,
-                morador, super_admin, primeiro_acesso, token, data_cadastro,
-                id_unidade
+                nome, sobrenome, data_nascimento, cpf, telefone,
+                email, operador, administrador, morador, id_unidade,
+                super_admin, primeiro_acesso, senha
             } = req.body
 
-           const tokenScript = nome + cpf + email
-           const generatedToken = await bcrypt.hash(tokenScript, 10)
+            // const data_cadastro = usar API de data para pegar o dia cadastrado  
 
-        try{
-            if(primeiro_acesso == 'sim'){
+            const tokenScript = `${nome}${cpf}${email}`
+            const generatedToken = await bcrypt.hash(tokenScript, 10)
+
+            try{
+                if(primeiro_acesso == 'sim'){
                 
-            }else{
+                }else{
                 
             }
-        }catch(error){
-            return res.status(500).json({ error: error })
-        }
+            }catch(error){
+                return res.status(500).json({ error: error })
+            }
         
         }
     }

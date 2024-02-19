@@ -10,7 +10,7 @@ configApp(app)
 
 app.use('/condominiums', condominiumRoutes)
 app.use('/units', unitRoutes)
-app.use('/person', personRouter)
+app.use('/people', personRouter)
 
 const PORT = 3000
 app.listen(PORT, () => {
