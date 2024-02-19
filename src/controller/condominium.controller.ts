@@ -2,10 +2,10 @@ import { Request, Response } from "express"
 import Condominium from '../models/condominium.models'
 
 export class CondominiumController {
-    static async listCondominium(req: Request, res: Response) {
+    static async listCondominiums(req: Request, res: Response) {
         try{
             const condominiums = await Condominium.findAll()
-            return res.render('condominiums/condominiums', { condominiums })
+            return res.render('condominiums/list', { condominiums })
         } catch(error){
             return res.status(500).json({ error: error })
         }
@@ -14,7 +14,7 @@ export class CondominiumController {
     static async createCondominium(req: Request, res: Response){
         if(req.method == 'GET'){
             try{
-                return res.render('condominiums/newCondominium')
+                return res.render('condominiums/create')
             } catch(error){
                 return res.status(500).json({error: error})
             }
@@ -47,7 +47,7 @@ export class CondominiumController {
         let condominiumID = req.params.id
         if(req.method == 'GET'){
             try{
-                return res.render('condominiums/deleteCondominium', { condominiumID })
+                return res.render('condominiums/delete', { condominiumID })
             } catch(error){
                 return res.status(500).json({ error: error })
             }

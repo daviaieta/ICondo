@@ -3,7 +3,7 @@ import { CondominiumController } from '../controller/condominium.controller'
 
 const router = express.Router()
 
-router.get('/', CondominiumController.listCondominium)
+router.get('/', CondominiumController.listCondominiums)
 
 
 router.get('/new', CondominiumController.createCondominium)

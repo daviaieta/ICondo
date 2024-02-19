@@ -12,7 +12,7 @@ export class UnitController{
                 as: 'condominios'
             }]
         })
-            return res.render('units/units', { units })
+            return res.render('units/list', { units })
         }catch(error){
             console.log(error)
             return res.status(500).json({error: error})
@@ -23,7 +23,7 @@ export class UnitController{
         if(req.method == 'GET'){
             try{
                 const condominiums = await Condominium.findAll()
-                return res.render('units/newUnit', { condominiums })
+                return res.render('units/create', { condominiums })
             }catch(error){
                 return res.status(500).json({error: error})
             }
@@ -50,7 +50,7 @@ export class UnitController{
         const unitID = req.params.id
         if(req.method == 'GET'){
             try{
-                return res.render('units/deleteUnit', { unitID })
+                return res.render('units/delete', { unitID })
             }catch(error){
                 return res.status(500).json({error: error})
             }
