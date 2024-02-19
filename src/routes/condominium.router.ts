@@ -6,8 +6,8 @@ const router = express.Router()
 router.get('/', CondominiumController.listCondominiums)
 
 
-router.get('/new', CondominiumController.createCondominium)
-router.post('/new', CondominiumController.createCondominium)
+router.get('/create', CondominiumController.createCondominium)
+router.post('/create', CondominiumController.createCondominium)
 
 
 router.get('/delete/:id', CondominiumController.deleteCondominium)

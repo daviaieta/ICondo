@@ -42,6 +42,7 @@ export class PersonController{
         }catch(error){
             return res.status(500).json({ error: error })
         }
+        
         }
     }
 }
