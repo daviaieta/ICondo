@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import Person from '../models/person.models'
 import Unit from "../models/unit.models"
+import bcrypt from 'bcrypt'
 
 export class PersonController{
     static async listPeople(req: Request, res: Response){
@@ -13,8 +14,12 @@ export class PersonController{
     }
     static async createPerson(req: Request, res: Response){
         if(req.method == 'get'){
-            const units = await Unit.findAll()
-            return res.render('people/create', { units })
+            try{
+                const units = await Unit.findAll()
+                return res.render('people/create', { units })
+            }catch(error){
+                return res.status(500).json({ error: error })
+            }
         }
         
         else{
@@ -23,9 +28,20 @@ export class PersonController{
                 telefone, email, operador, administrador,
                 morador, super_admin, primeiro_acesso, token, data_cadastro,
                 id_unidade
-           } = req.body
+            } = req.body
 
+           const tokenScript = nome + cpf + email
+           const generatedToken = await bcrypt.hash(tokenScript, 10)
 
+        try{
+            if(primeiro_acesso == 'sim'){
+                
+            }else{
+                
+            }
+        }catch(error){
+            return res.status(500).json({ error: error })
+        }
         }
     }
 }
