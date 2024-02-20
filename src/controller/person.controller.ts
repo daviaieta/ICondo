@@ -28,7 +28,7 @@ export class PersonController{
             const {
                 nome, sobrenome, data_nascimento, cpf, telefone,
                 email, operador, administrador, morador, id_unidade,
-                super_admin, primeiro_acesso, senha
+                primeiro_acesso, senha
             } = req.body
 
             // const data_cadastro = usar API de data para pegar o dia cadastrado  
@@ -38,10 +38,14 @@ export class PersonController{
 
             try{
                 if(primeiro_acesso == 'sim'){
-                
-                }else{
-                
-            }
+                    
+                }
+                await Person.create({
+                    nome: nome, sobrenome: sobrenome, data_nascimento: data_nascimento,
+                    cpf: cpf, telefone: telefone, email: email, operador: operador,
+                    administrador: administrador, morador: morador, id_unidade: id_unidade,
+                    primeiro_acesso
+                })
             }catch(error){
                 return res.status(500).json({ error: error })
             }
