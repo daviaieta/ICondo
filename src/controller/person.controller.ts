@@ -25,31 +25,16 @@ export class PersonController{
         }
         
         else{
-            let {
-                nome, sobrenome, data_nascimento, cpf, telefone,
-                email, operador, administrador, morador, id_unidade,
-                primeiro_acesso, senha
-            } = req.body        
+            const person = req.body
             
-            let telefoneInt = parseInt(telefone) 
-            let cpfInt = parseInt(cpf)
-
-            const data_cadastro = new Date()
-
-            const tokenScript = `${nome}${cpf}${email}`
+            const tokenScript = `${person.nome}${person.cpf}${person.email}`
             const generatedToken = await bcrypt.hash(tokenScript, 10)
 
             try{
-                if(primeiro_acesso == 'sim'){
+                if(person.primeiro_acesso == 'sim'){
                     
                 }
-                await Person.create({
-                    nome: nome, sobrenome: sobrenome, data_nascimento: data_nascimento,
-                    cpf: cpfInt, telefone: telefoneInt, email: email, operador: operador,
-                    administrador: administrador, morador: morador, id_unidade: id_unidade,
-                    primeiro_acesso: primeiro_acesso, senha: senha, token: generatedToken,
-                    data_cadastro: data_cadastro
-                })
+                await Person.create(person)
                 return res.redirect('/people')
             }catch(error){
                 return res.status(500).json({ error: error })
