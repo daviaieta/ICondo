@@ -34,7 +34,9 @@ export class PersonController{
                 if(person.primeiro_acesso == 'sim'){
                     
                 }
+                person.token = generatedToken
                 await Person.create(person)
+
                 return res.redirect('/people')
             }catch(error){
                 return res.status(500).json({ error: error })
