@@ -21,21 +21,9 @@ export class CondominiumController {
         }
 
         else{
-            const { razao_social, logradouro, numend, complemento,
-                bairro, localidade, uf, cep, telefone, cnpj } = req.body
-            try{
-                await Condominium.create({
-                    razao_social: razao_social,
-                    logradouro: logradouro,
-                    numend: numend,
-                    complemento: complemento,
-                    bairro: bairro,
-                    localidade: localidade,
-                    uf: uf,
-                    cep: cep,
-                    telefone: telefone,
-                    cnpj: cnpj
-                })
+            const condominium = req.body
+            try{             
+                await Condominium.create(condominium)
                 return res.redirect('/condominiums')
             } catch(error){
                 return res.status(500).json({ error: error })

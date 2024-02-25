@@ -74,17 +74,17 @@ const Person = db.define('pessoas', {
 }
 )
 
-Person.belongsTo(Unidades, {
-     foreignKey: 'id_unidade',
-     as: 'unidade'
-})
+// Person.belongsTo(Unidades, {
+//      foreignKey: 'id_unidade',
+//      as: 'unidade'
+// })
 
-Person.sync({ alter: true })
-     .then(() => {
-          console.log('Tabela Criada com sucesso')
-     })
-     .catch(erro => {
-          console.log('Erro ao criar a tabela: ' + erro)
-     })
+// Person.sync({ alter: true })
+//      .then(() => {
+//           console.log('Tabela Criada com sucesso')
+//      })
+//      .catch(erro => {
+//           console.log('Erro ao criar a tabela: ' + erro)
+//      })
 
 module.exports = Person
