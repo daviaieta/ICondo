@@ -30,15 +30,9 @@ export class UnitController{
         }
 
         else{
-            const { bloco, tipo, unidade, vaga_fixa, id_condominio } = req.body
+            const unit = req.body
             try{
-                await Unit.create({
-                    bloco: bloco,
-                    tipo: tipo,
-                    unidade: unidade,
-                    vaga_fixa: vaga_fixa,
-                    id_condominio: id_condominio
-                })
+                await Unit.create(unit)
                 return res.redirect('/units')
             }catch(error){
                 return res.status(500).json({error: error})
