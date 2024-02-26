@@ -28,14 +28,13 @@ export class PersonController{
         
         else if(req.method == 'POST'){
             const person = req.body
-            const token = helper.generateHashToken(person.nome, person.cpf, person.email)
             try{
                 if(person.primeiro_acesso == 'sim'){
-                    
+                    person.token = helper.generateHashToken(person.nome, person.cpf, person.email)
+                    // Destroir token ao finalizar o primeiro acesso
                 }
-                person.token = token
-                await Person.create(person)
 
+                await Person.create(person)
                 return res.redirect('/people')
             }catch(error){
                 return res.status(500).json({ error: error })
