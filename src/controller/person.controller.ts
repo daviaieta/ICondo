@@ -2,7 +2,9 @@ import { Request, Response } from "express"
 import Person from '../models/person.models'
 import Unit from "../models/unit.models"
 import Condominium from '../models/condominium.models'
-import bcrypt from 'bcrypt'
+import { Helper } from "../helpers/helper"
+
+const helper = new Helper()
 
 export class PersonController{
     static async listPeople(req: Request, res: Response){
@@ -24,17 +26,14 @@ export class PersonController{
             }
         }
         
-        else{
+        else if(req.method == 'POST'){
             const person = req.body
-            
-            const tokenScript = `${person.nome}${person.cpf}${person.email}`
-            const generatedToken = await bcrypt.hash(tokenScript, 10)
-
+            const token = helper.generateHashToken(person.nome, person.cpf, person.email)
             try{
                 if(person.primeiro_acesso == 'sim'){
                     
                 }
-                person.token = generatedToken
+                person.token = token
                 await Person.create(person)
 
                 return res.redirect('/people')
