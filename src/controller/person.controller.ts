@@ -31,6 +31,7 @@ export class PersonController{
             try{
                 if(person.primeiro_acesso == 'sim'){
                     person.token = helper.generateHashToken(person.nome, person.cpf, person.email)
+                    helper.sendMailFirstAcess(person.email)
                     // Destroir token ao finalizar o primeiro acesso
                 }
 
