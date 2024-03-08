@@ -32,8 +32,8 @@ export class PersonController{
                 if(person.primeiro_acesso == 's'){
                     const token = await helper.generateHashToken(person.nome, person.cpf, person.telefone)
                     person.token = token
-                    
-                    helper.sendMailFirstAcess(person.email)
+
+                    helper.sendMailFirstAcess(person.email, token)
                 }
 
                 

@@ -8,8 +8,8 @@ export class Helper{
         return generatedToken
     }
 
-    public async sendMailFirstAcess(toEmail: string) {
-        const link = 'link to complete your registration'
+    public async sendMailFirstAcess(toEmail: string, token: any) {
+        const link = `http://localhost:3000/people/finish-registration/${token}`
         const subject = 'complete your registration'
         const emailBody = `[iCondo] Segue o link
                         para a finalização do cadastro: ${link}`
