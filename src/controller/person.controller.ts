@@ -27,12 +27,10 @@ export class PersonController{
         }
         
         else if(req.method == 'POST'){
-            const person = req.body
             try{
-                if(person.primeiro_acesso == 'sim'){
-                    person.token = helper.generateHashToken(person.nome, person.cpf, person.email)
+                const person = req.body
+                if(person.primeiro_acesso == 's'){
                     helper.sendMailFirstAcess(person.email)
-                    // Destroir token ao finalizar o primeiro acesso
                 }
 
                 await Person.create(person)

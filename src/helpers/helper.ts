@@ -13,6 +13,7 @@ export class Helper{
         const subject = 'complete your registration'
         const emailBody = `[iCondo] Segue o link
                         para a finalização do cadastro: ${link}`
-        await sendMail(toEmail, subject, emailBody)
+        
+        return await sendMail(toEmail, subject, emailBody)
     }
 }
