@@ -8,6 +8,10 @@ export class Helper{
         return generatedToken
     }
 
+    public async generateHashPassword(password: any){
+        return await bcrypt.hash(password, 10)
+    }   
+
     public async sendMailFirstAcess(toEmail: string, token: any) {
         const link = `http://localhost:3000/auth/finish-registration/${token}`
         const subject = 'complete your registration'
