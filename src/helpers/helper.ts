@@ -9,7 +9,7 @@ export class Helper{
     }
 
     public async sendMailFirstAcess(toEmail: string, token: any) {
-        const link = `http://localhost:3000/people/finish-registration/${token}`
+        const link = `http://localhost:3000/auth/finish-registration/${token}`
         const subject = 'complete your registration'
         const emailBody = `[iCondo] Segue o link
                         para a finalização do cadastro: ${link}`

@@ -3,7 +3,7 @@ import { AuthController } from '../controller/auth.controller'
 
 const router = express.Router()
 
-router.get('/finishRegistration/:token', AuthController.finishRegistration)
-router.post('/finishRegistration/:token', AuthController.finishRegistration)
+router.get('/finish-registration/:token', AuthController.finishRegistration)
+router.post('/finish-registration/:token', AuthController.finishRegistration)
 
 export default router
