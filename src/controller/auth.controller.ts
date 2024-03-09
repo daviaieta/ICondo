@@ -21,7 +21,23 @@ export class AuthController{
         }
         
         else if(req.method == 'POST'){
-            
+            try{
+                const token = req.params.token
+                const password = req.body.password
+
+                const person = await Person.findOne({
+                    where: { token }
+                })
+
+                if(person){
+                    person.setDataValue('senha', password)
+                    await person.save()
+                    
+                    return res.redirect('/auth/login')
+                }
+            } catch(error){
+                return res.status(500).json({ error: error })
+            }
         }
     }
 }
