@@ -49,4 +49,33 @@ export class AuthController{
             }
         }
     }
+
+    static async login(req: Request, res: Response){
+        if(req.method == 'GET'){
+            try{
+                return res.render('auth/login')
+            }catch(error){
+                return res.status(400).send('Error - ' + error)
+            }
+        }       
+
+        else if(req.method == 'POST'){
+            try{
+                const { email, password } = req.body;
+                const person = await Person.findOne({where: { email }})
+                
+                if(person){
+                    if(person.password === password){
+                        return true
+                    } else{
+                        return false
+                    }
+                }
+
+            }catch(error){
+                return res.status(400).send('Error - ' + error)
+            }
+        }
+
+    }
 }
