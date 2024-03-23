@@ -10,7 +10,11 @@ export class Helper{
 
     public async generateHashPassword(password: any){
         return await bcrypt.hash(password, 10)
-    }   
+    }
+
+    public async comparePassword(password1: any, password2: any){
+        return await bcrypt.compare(password2, password1)
+    }
 
     public async sendMailFirstAcess(toEmail: string, token: any) {
         const link = `http://localhost:3000/auth/finish-registration/${token}`

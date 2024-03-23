@@ -63,9 +63,9 @@ export class AuthController{
             try{
                 const { email, password } = req.body;
                 const person = await Person.findOne({where: { email }})
-                
+
                 if(person){
-                    if(person.password === password){
+                    if(await helper.comparePassword(person?.dataValues.senha, password)){
                         return true
                     } else{
                         return false
