@@ -1,12 +1,10 @@
 import { Request, Response } from "express"
 import Person from '../models/person.models'
 import { Helper } from "../helpers/helper"
-import session from "express-session";
+import jwt from 'jsonwebtoken'
+import cookieParser from 'cookie-parser'
 
 const helper = new Helper()
-interface UserSession {
-    user?: { email: string };
-}
 
 export class AuthController{
     static async finishRegistration(req: Request, res: Response){
@@ -69,9 +67,12 @@ export class AuthController{
                 const person = await Person.findOne({where: { email }})
 
                 if(person){
-                    if(await helper.comparePassword(person.dataValues.senha, password)
-                    && person.dataValues.email == email){
+                    if(await helper.comparePassword(person.dataValues.senha, password) && person.dataValues.email == email){
+                        console.log(person)
                         
+                        const token = jwt.sign({ id: person.dataValues.id, email: person.dataValues.email }, '123', { expiresIn: '1h' });
+                        res.cookie('jwt', token, { httpOnly: true })
+                        return res.status(200).json({ message: 'Login successful', token });
                     }else{
                         return res.status(401).json({ message: 'Invalid email or password' })
                     }
