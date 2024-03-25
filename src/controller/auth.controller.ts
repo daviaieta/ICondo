@@ -1,8 +1,12 @@
 import { Request, Response } from "express"
 import Person from '../models/person.models'
 import { Helper } from "../helpers/helper"
+import session from "express-session";
 
 const helper = new Helper()
+interface UserSession {
+    user?: { email: string };
+}
 
 export class AuthController{
     static async finishRegistration(req: Request, res: Response){
@@ -20,9 +24,9 @@ export class AuthController{
     
             } catch(error){
                 return res.status(500).json({ error: error })
-            }
+            }       
         }
-        
+
         else if(req.method == 'POST'){
             try{
                 const token = req.params.token
@@ -65,10 +69,12 @@ export class AuthController{
                 const person = await Person.findOne({where: { email }})
 
                 if(person){
-                    if(await helper.comparePassword(person?.dataValues.senha, password)){
-                        return true
-                    } else{
-                        return false
+                    if(await helper.comparePassword(person.dataValues.senha, password)
+                    && person.dataValues.email == email){
+                        req.body.user = { email }
+                        return res.status(200).json({ message: 'Login successful', user: req.body.user })
+                    }else{
+                        return res.status(401).json({ message: 'Invalid email or password' })
                     }
                 }
 
