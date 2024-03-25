@@ -36,7 +36,6 @@ export class PersonController{
                     helper.sendMailFirstAcess(person.email, token)
                 }
 
-                
                 await Person.create(person)
                 return res.redirect('/people')
             }catch(error){

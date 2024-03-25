@@ -71,8 +71,7 @@ export class AuthController{
                 if(person){
                     if(await helper.comparePassword(person.dataValues.senha, password)
                     && person.dataValues.email == email){
-                        req.body.user = { email }
-                        return res.status(200).json({ message: 'Login successful', user: req.body.user })
+                        
                     }else{
                         return res.status(401).json({ message: 'Invalid email or password' })
                     }

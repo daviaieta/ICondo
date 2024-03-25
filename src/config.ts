@@ -1,20 +1,11 @@
 import express from 'express'
 import * as exphbs from 'express-handlebars'
 import path from 'path'
-import session from 'express-session';
 
 const configApp = (app: any): void => {
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use('/public', express.static(path.join(__dirname, '../src/public')))
-
-  app.use(
-    session({
-      secret: 'sua_chave_secreta_aqui',
-      resave: false,
-      saveUninitialized: false,
-    })
-  )
 
   const handlebars = exphbs.create({
     defaultLayout: 'main',
