@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
-const authenticate = (req: Request, res: Response, next: NextFunction) =>{
+const authenticate = (req: Request, res: Response, next: NextFunction):any =>{
     const token = req.cookies['jwt']
 
     if(!token){
