@@ -23,9 +23,7 @@ export class AuthController{
             } catch(error){
                 return res.status(500).json({ error: error })
             }       
-        }
-
-        else if(req.method == 'POST'){
+        }else{
             try{
                 const token = req.params.token
                 const password = req.body.password
@@ -59,9 +57,7 @@ export class AuthController{
             }catch(error){
                 return res.status(400).send('Error - ' + error)
             }
-        }       
-
-        else if(req.method == 'POST'){
+        }else{
             try{
                 const { email, password } = req.body;
                 const person = await Person.findOne({where: { email }})
@@ -81,6 +77,19 @@ export class AuthController{
                 return res.status(400).send('Error - ' + error)
             }
         }
-
     }
+
+    static async logout(req: Request, res: Response){
+        if(req.method == 'GET'){
+
+        }else{
+            try{
+                res.clearCookie('jwt')
+                return res.json({ message: 'Logout' })
+            } catch(error){
+                return res.status(400).json({ message: 'Error - ' + error})
+            }
+        }
+    }
+
 }

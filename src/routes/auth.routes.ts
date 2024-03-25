@@ -9,4 +9,7 @@ router.post('/finish-registration/:token', AuthController.finishRegistration)
 router.get('/login', AuthController.login)
 router.post('/login', AuthController.login)
 
+router.get('/logout', AuthController.logout)
+router.post('/logout', AuthController.logout)
+
 export default router
