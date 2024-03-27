@@ -66,13 +66,15 @@ export class AuthController{
                     if(await helper.comparePassword(person.dataValues.senha, password) && person.dataValues.email == email){
                         const token = jwt.sign({ id: person.dataValues.id_pessoa, email: person.dataValues.email }, '123', { expiresIn: '1h' });
                         res.cookie('jwt', token, { httpOnly: true })
+                        
+                        await Person.update({ login_token: token }, { where: { id_pessoa: person.dataValues.id_pessoa } })
+                        console.log(person)
 
                         return res.status(200).json({ message: 'Login successful', token });
                     }else{
                         return res.status(401).json({ message: 'Invalid email or password' })
                     }
                 }
-
             }catch(error){
                 return res.status(400).send('Error - ' + error)
             }
@@ -81,7 +83,11 @@ export class AuthController{
 
     static async logout(req: Request, res: Response){
         if(req.method == 'GET'){
-
+            try{
+                return res.render('auth/logout')
+            }catch(error){
+                return res.status(400).send('Error - ' + error)
+            }
         }else{
             try{
                 res.clearCookie('jwt')

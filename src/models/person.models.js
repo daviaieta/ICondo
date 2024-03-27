@@ -61,6 +61,10 @@ const Person = db.define('pessoas', {
           type: Sequelize.STRING,
           allowNull: true
      },
+     login_token: {
+          type: Sequelize.STRING,
+          allowNull: true
+     },
      id_unidade: {
           type: Sequelize.INTEGER,
           allowNull: false,
