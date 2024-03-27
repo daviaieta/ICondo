@@ -98,4 +98,18 @@ export class AuthController{
         }
     }
 
+    static async showProfile(req: Request, res: Response){
+        if(req.method == 'GET'){
+            try{
+                const token = req.cookies['jwt']
+                const person = await Person.findOne({ where: { login_token: token } })
+                console.log(person)
+
+                return res.render('auth/profile', { person: person?.dataValues })
+            }catch(error){
+                return res.status(400).json({ message: 'error - ' + error })
+            }
+        }
+    }
+
 }
