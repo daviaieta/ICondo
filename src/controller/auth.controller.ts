@@ -1,8 +1,9 @@
-import { Request, Response } from "express"
+import { Request, Response } from 'express'
 import Person from '../models/person.models'
-import { Helper } from "../helpers/helper"
+import { Helper } from '../helpers/helper'
 import jwt from 'jsonwebtoken'
-import cookieParser from 'cookie-parser'
+import determinePersonType from '../services/personType'
+import path from 'path'
 
 const helper = new Helper()
 
@@ -53,7 +54,8 @@ export class AuthController{
     static async login(req: Request, res: Response){
         if(req.method == 'GET'){
             try{
-                return res.render('auth/login')
+                console.log(__dirname)
+                return res.sendFile(path.join(__dirname, '../', 'views', 'auth', 'login.html'))
             }catch(error){
                 return res.status(400).send('Error - ' + error)
             }
@@ -64,11 +66,10 @@ export class AuthController{
 
                 if(person){
                     if(await helper.comparePassword(person.dataValues.senha, password) && person.dataValues.email == email){
-                        const token = jwt.sign({ id: person.dataValues.id_pessoa, email: person.dataValues.email }, '123', { expiresIn: '1h' });
+                        const token = jwt.sign({ id: person.dataValues.id_pessoa, email: person.dataValues.email, type:determinePersonType(person) }, '123', { expiresIn: '1h' });
                         res.cookie('jwt', token, { httpOnly: true })
                         
                         await Person.update({ login_token: token }, { where: { id_pessoa: person.dataValues.id_pessoa } })
-                        console.log(person)
 
                         return res.status(200).json({ message: 'Login successful', token });
                     }else{
@@ -91,7 +92,7 @@ export class AuthController{
         }else{
             try{
                 res.clearCookie('jwt')
-                return res.json({ message: 'Logout' })
+                return res.redirect('/auth/login')
             } catch(error){
                 return res.status(400).json({ message: 'Error - ' + error})
             }
@@ -103,9 +104,9 @@ export class AuthController{
             try{
                 const token = req.cookies['jwt']
                 const person = await Person.findOne({ where: { login_token: token } })
-                console.log(person)
+                const personInfo = person?.dataValues
 
-                return res.render('auth/profile', { person: person?.dataValues })
+                return res.render('auth/profile', { personInfo })
             }catch(error){
                 return res.status(400).json({ message: 'error - ' + error })
             }
