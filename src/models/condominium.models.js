@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('./conn.models')
+const Person = require('./person.models')
 
 const Condominium = db.define('condominios', {
      id_condominio: {
@@ -38,10 +39,23 @@ const Condominium = db.define('condominios', {
      cnpj: {
           type: Sequelize.STRING
      },
+     id_created_by: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+               model: Person,
+               key: 'id_pessoa'
+          }
+     },
 }, {
      timestamps: false,
 }
 )
+
+// Condominium.belongsTo(Person, {
+//      foreignKey: 'id_created_by',
+//      as: 'created_by'
+// })
 
 // Condominium.sync({ alter: true })
 //      .then(() => {

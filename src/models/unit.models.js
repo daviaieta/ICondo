@@ -34,10 +34,10 @@ const Unit = db.define('unidades', {
 }
 )
 
-Unit.belongsTo(Condominium, {
-     foreignKey: 'id_condominio',
-     as: 'condominios'
-})
+// Unit.belongsTo(Condominium, {
+//      foreignKey: 'id_condominio',
+//      as: 'condominios'
+// })
 
 // Unit.sync({ alter: true })
 //      .then(() => {

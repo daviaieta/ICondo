@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('./conn.models')
-const Unidades = require('./unit.models')
+const Unit = require('./unit.models')
 const Condominium = require('./condominium.models')
 
 const Person = db.define('pessoas', {
@@ -70,7 +70,7 @@ const Person = db.define('pessoas', {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-               model: Unidades,
+               model: Unit,
                key: 'id_unidade'
           }
      },
@@ -81,28 +81,28 @@ const Person = db.define('pessoas', {
                model: Condominium,
                key: 'id_condominio'
           }
-     },
+     }, 
 }, {
      timestamps: false,
 }
 )
 
-Person.belongsTo(Condominium, {
-     foreignKey: 'id_condominio',
-     as: 'condominios'
-})
+// Person.belongsTo(Condominium, {
+//      foreignKey: 'id_condominio',
+//      as: 'condominios'
+// })
 
-Person.belongsTo(Unidades, {
-     foreignKey: 'id_unidade',
-     as: 'unidade'
-})
+// Person.belongsTo(Unit, {
+//      foreignKey: 'id_unidade',
+//      as: 'unidade'
+// })
 
-Person.sync({ alter: true })
-     .then(() => {
-          console.log('Tabela Criada com sucesso')
-     })
-     .catch(erro => {
-          console.log('Erro ao criar a tabela: ' + erro)
-     })
+// Person.sync({ alter: true })
+//      .then(() => {
+//           console.log('Tabela Criada com sucesso')
+//      })
+//      .catch(erro => {
+//           console.log('Erro ao criar a tabela: ' + erro)
+//      })
 
 module.exports = Person
