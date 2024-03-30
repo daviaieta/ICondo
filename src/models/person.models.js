@@ -87,10 +87,10 @@ const Person = db.define('pessoas', {
 }
 )
 
-// Person.belongsTo(Condominium, {
-//      foreignKey: 'id_condominio',
-//      as: 'condominios'
-// })
+Person.belongsTo(Condominium, {
+     foreignKey: 'id_condominio',
+     as: 'condominios'
+})
 
 // Person.belongsTo(Unit, {
 //      foreignKey: 'id_unidade',

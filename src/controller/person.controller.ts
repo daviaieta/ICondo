@@ -30,7 +30,6 @@ export class PersonController{
             try{
                 const person = req.body
                 if(person.primeiro_acesso == 's'){
-                    // validar erro antes
                     const token = await helper.generateHashToken(person.nome, person.cpf, person.telefone)
                     person.token = token
 
