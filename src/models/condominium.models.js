@@ -4,7 +4,7 @@ const db = require('./conn.models')
 const Condominium = db.define('condominios', {
      id_condominio: {
           type: Sequelize.INTEGER,
-          primaryKey: true,
+          primaryKey: true,   
           autoIncrement: true,
           allowNull: false,
      },

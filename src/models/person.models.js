@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('./conn.models')
-const Unit = require('./unit.models')
-const Condominium = require('./condominium.models')
+const Unit = require('../models/unit.models')
+const Condominium = require('../models/condominium.models')
 
 const Person = db.define('pessoas', {
      id_pessoa: {
@@ -68,7 +68,7 @@ const Person = db.define('pessoas', {
      },
      id_unidade: {
           type: Sequelize.INTEGER,
-          allowNull: false,
+          allowNull: true,
           references: {
                model: Unit,
                key: 'id_unidade'
@@ -92,10 +92,10 @@ Person.belongsTo(Condominium, {
      as: 'condominios'
 })
 
-// Person.belongsTo(Unit, {
-//      foreignKey: 'id_unidade',
-//      as: 'unidade'
-// })
+Person.belongsTo(Unit, {
+     foreignKey: 'id_unidade',
+     as: 'unidade'
+})
 
 // Person.sync({ alter: true })
 //      .then(() => {

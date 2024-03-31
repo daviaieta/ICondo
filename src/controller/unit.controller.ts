@@ -1,17 +1,33 @@
 import { Request, Response } from "express"
 import Unit from '../models/unit.models'
 import Condominium from '../models/condominium.models'
+import jwt from 'jsonwebtoken'
+import Person from '../models/person.models'
 
 export class UnitController{
     static async listUnits(req: Request, res: Response){
         try{
-        const units = await Unit.findAll({
-            include: [{
-                model: Condominium,
-                attributes: ['razao_social'],
-                as: 'condominios'
-            }]
-        })
+            const jwtToken = req.cookies.jwt
+
+            const decodedToken:any = jwt.verify(jwtToken, '123')
+            const person = await Person.findByPk(decodedToken.id, {
+                include: {
+                    model: Condominium,
+                    attributes: [],
+                    as: 'condominios'
+                }
+            })
+            
+            const units = await Unit.findAll({
+                where: {
+                    id_condominio: person?.dataValues.id_condominio
+                },
+                include: [{
+                    model: Condominium,
+                    attributes: ['razao_social'],
+                    as: 'condominios'
+                }]
+            })
             return res.render('units/list', { units })
         }catch(error){
             console.log(error)
@@ -22,7 +38,22 @@ export class UnitController{
     static async createUnit(req: Request, res: Response){
         if(req.method == 'GET'){
             try{
-                const condominiums = await Condominium.findAll()
+                const jwtToken = req.cookies.jwt
+
+                const decodedToken:any = jwt.verify(jwtToken, '123')
+                const person = await Person.findByPk(decodedToken.id, {
+                    include: {
+                        model: Condominium,
+                        attributes: [],
+                        as: 'condominios'
+                    }
+                })
+
+                const condominiums = await Condominium.findAll({
+                    where: {
+                        id_condominio: person?.dataValues.id_condominio
+                    }
+                })
                 return res.render('units/create', { condominiums })
             }catch(error){
                 return res.status(500).json({error: error})
