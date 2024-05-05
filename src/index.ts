@@ -1,9 +1,9 @@
 import express from 'express'
 import configApp from './config'
 
-import condominiumRoutes from './routes/condominium.router' 
-import unitRoutes from './routes/units.routes' 
-import personRouter from './routes/person.router'
+import condominiumRoutes from './routes/condominium.routes'
+import unitRoutes from './routes/units.routes'
+import personRouter from './routes/person.routes'
 import authRouter from './routes/auth.routes'
 import orderRouter from './routes/order.routes'
 

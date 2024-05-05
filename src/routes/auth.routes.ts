@@ -14,5 +14,4 @@ router.post('/logout', AuthController.logout)
 
 router.get('/profile', AuthController.showProfile)
 
-
 export default router
