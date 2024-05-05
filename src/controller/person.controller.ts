@@ -27,6 +27,7 @@ export class PersonController {
     } else if (req.method == 'POST') {
       try {
         const person = req.body
+
         if (person.primeiro_acesso == 's') {
           const token = await helper.generateHashToken(
             person.nome,
