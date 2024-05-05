@@ -3,7 +3,7 @@ import { UnitController } from '../controller/unit.controller'
 import authenticate from '../middleware/authMiddleware'
 
 const router = express.Router()
-router.use(authenticate)
+// router.use(authenticate)
 
 router.get('/', UnitController.listUnits)
 

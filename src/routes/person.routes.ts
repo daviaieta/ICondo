@@ -3,7 +3,7 @@ import { PersonController } from '../controller/person.controller'
 import authenticate from '../middleware/authMiddleware'
 
 const router = express.Router()
-router.use(authenticate)
+// router.use(authenticate)
 
 router.get('/', PersonController.listPeople)
 
