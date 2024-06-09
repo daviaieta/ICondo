@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Condo {
+  id              Int    @id @default(autoincrement())
+  name            String
+  public_place    String
+  address_number  String
+  complement      String
+  neighborhood    String
+  locality        String
+  federative_unit String
+  zip_code        String
+  phone_number    String
+  cnpj            String
+
+  units Unit[]
+}
+
+model Unit {
+  id    Int    @id @default(autoincrement())
+  block String
+  type  String
+  unit  String
+
+  Condo   Condo @relation(fields: [condoId], references: [id])
+  condoId Int
+
+  users  User[]
+  orders Order[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id          Int    @id @default(autoincrement())
+  name        String
+  cpf         String @unique
+  birth_date  String
+  email       String @unique
+  first_acess String
+  password    String
+  token       String @unique
+
+  role UserRole @default(USER)
+
+  Unit   Unit @relation(fields: [unitId], references: [id])
+  unitId Int
+
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id                  Int      @id @default(autoincrement())
+  invoice             String
+  tracking_code       String
+  date_time_entry     DateTime
+  date_time_departure DateTime
+  protocol            String
+
+  Unit   Unit @relation(fields: [unitId], references: [id])
+  unitId Int
+}
