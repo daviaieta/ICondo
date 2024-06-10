@@ -4,7 +4,7 @@ import { prisma } from '../lib/prisma'
 export class UnitController {
   static async listUnits(req: Request, res: Response) {
     try {
-      const unit = await prisma.unit.findMany({})
+      const unit = await prisma.unidade.findMany({})
       return res.status(200).json({ unit })
     } catch (error) {
       return res.status(400).json({
@@ -17,7 +17,7 @@ export class UnitController {
   static async createUnit(req: Request, res: Response) {
     try {
       const unit = req.body
-      await prisma.unit.create(unit)
+      await prisma.unidade.create(unit)
 
       return res.status(200).json({ unit })
     } catch (error) {
@@ -28,7 +28,7 @@ export class UnitController {
   static async deleteUnit(req: Request, res: Response) {
     try {
       const unitId = req.body.id
-      await prisma.unit.delete({
+      await prisma.unidade.delete({
         where: unitId,
       })
       return res.status(200).json({})

@@ -1,5 +1,5 @@
-import { Condominium } from "./_components/condominiums-list";
+import { Condo } from "./_components/condominiums-list";
 
 export default function Page() {
-  return <Condominium />;
+  return <Condo />;
 }

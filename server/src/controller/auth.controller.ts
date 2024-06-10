@@ -33,11 +33,11 @@ export class AuthController {
 
   static async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body
+      const { email, senha } = req.body
       const user = await prisma.user.findUnique({ where: email })
 
       if (user) {
-        if ((await helper.comparePassword(user.password, password)) && user.email == email) {
+        if ((await helper.comparePassword(user.senha, senha)) && user.email == email) {
           const tokenData = {
             id: user.id,
           }

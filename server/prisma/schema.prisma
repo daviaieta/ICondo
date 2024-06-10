@@ -7,66 +7,67 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Condo {
+model Condominio {
   id              Int    @id @default(autoincrement())
-  name            String
-  public_place    String
-  address_number  String
-  complement      String
-  neighborhood    String
-  locality        String
-  federative_unit String
-  zip_code        String
-  phone_number    String
+  razao_social    String
+  logradouro      String
+  numero_endereco String
+  complemento     String
+  bairro          String
+  localidade      String
+  uf              String
+  cep             String
+  telefone        String
   cnpj            String
 
-  units Unit[]
+  units Unidade[]
 }
 
-model Unit {
-  id    Int    @id @default(autoincrement())
-  block String
-  type  String
-  unit  String
+model Unidade {
+  id      Int    @id @default(autoincrement())
+  bloco   String
+  unidade String
+  tipo    String
 
-  Condo   Condo @relation(fields: [condoId], references: [id])
-  condoId Int
+  Condominio   Condominio @relation(fields: [condominioId], references: [id])
+  condominioId Int
 
-  users  User[]
-  orders Order[]
+  users     User[]
+  Encomenda Encomenda[]
 }
 
 enum UserRole {
-  ADMIN
   USER
+  ADMIN
+  OPERADOR
 }
 
 model User {
-  id          Int    @id @default(autoincrement())
-  name        String
-  cpf         String @unique
-  birth_date  String
-  email       String @unique
-  first_acess String
-  password    String
-  token       String @unique
+  id              Int      @id @default(autoincrement())
+  nome            String
+  cpf             String   @unique
+  data_nascimento DateTime
+  email           String   @unique
+  primeiro_acesso String
+  senha           String
+  token           String   @unique
 
-  role UserRole @default(USER)
-
-  Unit   Unit @relation(fields: [unitId], references: [id])
-  unitId Int
+  cargo UserRole @default(USER)
 
   createdAt DateTime @default(now())
+
+  Unidade   Unidade @relation(fields: [unidadeId], references: [id])
+  unidadeId Int
 }
 
-model Order {
+model Encomenda {
   id                  Int      @id @default(autoincrement())
   invoice             String
   tracking_code       String
   date_time_entry     DateTime
   date_time_departure DateTime
-  protocol            String
+  protocolo           String
 
-  Unit   Unit @relation(fields: [unitId], references: [id])
-  unitId Int
+  Unidade   Unidade @relation(fields: [unidadeId], references: [id])
+  unidadeId Int
 }
