@@ -7,6 +7,6 @@ router.get('/', CondoController.list)
 
 router.post('/create', CondoController.create)
 
-router.post('/delete/', CondoController.delete)
+router.post('/delete', CondoController.delete)
 
 export default router

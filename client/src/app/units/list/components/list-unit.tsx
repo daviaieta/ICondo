@@ -32,38 +32,32 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { CreateCondo } from "./condominiums-create";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-export type Condo = {
+export type Unit = {
   id: number;
-  razao_social: string;
-  logradouro: string;
-  numero_endereco: string;
-  complemento: string;
-  bairro: string;
-  localidade: string;
-  uf: string;
-  cep: string;
-  telefone: string;
-  cnpj: string;
+  bloco: string;
+  unidade: string;
+  tipo: string;
+  condominioId: number;
 };
 
-export const Condo = () => {
-  const [condos, setCondos] = useState<Condo[]>([]);
+export const List = () => {
+  const [units, setUnit] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  async function list() {
+  async function fetch() {
     try {
-      const response = await axios.get("http://localhost:5000/condos");
+      const response = await axios.get("http://localhost:5000/units");
       const data = await response.data;
 
       if (data) {
-        setCondos(data);
+        setUnit(data);
+        console.log(data);
         setLoading(false);
       } else {
-        setCondos([]);
+        setUnit([]);
       }
     } catch (error) {
       console.error("Error fetch  ing users:", error);
@@ -72,11 +66,11 @@ export const Condo = () => {
   }
 
   useEffect(() => {
-    list();
+    fetch();
   }, []);
 
-  const filteredCondo = condos.filter((condo) =>
-    condo.razao_social.toLowerCase().includes(search.toLowerCase())
+  const filteredUnit = units.filter((unit) =>
+    unit.condominioId.toString().includes(search.toLowerCase())
   );
 
   return (
@@ -87,7 +81,7 @@ export const Condo = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Buscar condomínios..."
+              placeholder="Buscar unidades por condomínio..."
               className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -95,122 +89,77 @@ export const Condo = () => {
           </div>
         </form>
         <div className="ml-auto flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-7 gap-1">
-                <ListFilter className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Filter
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem checked>
-                Active
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
           <Button size="sm" variant="outline" className="h-7 gap-1">
             <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
               Export
             </span>
           </Button>
-          {/* Aqui vai abrir um modal */}
           <Dialog>
             <DialogTrigger asChild>
               <Button size="sm" variant="outline" className="h-7 gap-1.5">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Add Condomínio
+                  Add Unidade
                 </span>
               </Button>
             </DialogTrigger>
-            <CreateCondo />
           </Dialog>
         </div>
       </div>
 
       <Card>
         <CardHeader className="px-7">
-          <CardTitle>Condomínios</CardTitle>
-          <CardDescription>
-            Condomínios adicionados recentemente.
-          </CardDescription>
+          <CardTitle>Unidades</CardTitle>
+          <CardDescription>Unidades adicionadas recentemente.</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <p>Carregando...</p>
-          ) : filteredCondo.length > 0 ? (
+          ) : filteredUnit.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="hidden sm:table-cell">Bloco</TableHead>
                   <TableHead className="hidden sm:table-cell">
-                    Razão Social
+                    Unidade
                   </TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Logradouro
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">Bairro</TableHead>
+                  <TableHead className="hidden md:table-cell">Tipo</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Número de Endereço
+                    Condomínio
                   </TableHead>
-                  <TableHead className="hidden md:table-cell">CEP</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Telefone
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">CNPJ</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCondo.map((condo) => (
-                  <TableRow key={condo.id}>
+                {filteredUnit.map((unit) => (
+                  <TableRow key={unit.id}>
                     <TableCell>
-                      <div className="font-medium">{condo.razao_social}</div>
+                      <div className="font-medium">{}</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
-                        {condo.localidade}
+                        {unit.bloco}
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {condo.logradouro}
+                      {unit.unidade}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {condo.bairro}
+                      {unit.tipo}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       <Badge className="text-xs" variant="secondary">
-                        {condo.numero_endereco}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Badge className="text-xs" variant="secondary">
-                        {condo.cep}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Badge className="text-xs" variant="secondary">
-                        {condo.telefone}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Badge className="text-xs" variant="secondary">
-                        {condo.cnpj}
+                        {unit.condominioId}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only"></span>
                             <DotsHorizontalIcon className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuLabel>Ações</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>Editar</DropdownMenuItem>
                           <DropdownMenuItem>Excluir</DropdownMenuItem>
@@ -222,7 +171,7 @@ export const Condo = () => {
               </TableBody>
             </Table>
           ) : (
-            <p>Nenhum condomínio encontrado.</p>
+            <p>Nenhuma unidade encontrada.</p>
           )}
         </CardContent>
       </Card>
