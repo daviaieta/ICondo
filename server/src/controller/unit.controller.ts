@@ -14,10 +14,21 @@ export class UnitController {
   static async createUnit(req: Request, res: Response) {
     try {
       const unit = req.body
-      await prisma.unidade.create(unit)
+      console.log(unit.condominio)
+      await prisma.unidade.create({
+        data: {
+          ...unit,
+          Condominio: {
+            connect: {
+              id: unit.condominio,
+            },
+          },
+        },
+      })
 
       return res.status(200).json({ unit })
     } catch (error) {
+      console.log(error)
       return res.status(400).json({ error })
     }
   }

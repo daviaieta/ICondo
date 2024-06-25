@@ -1,5 +1,5 @@
-import { List } from "./list/components/list-condo";
+import { List as ListCondos } from "./_components/list-condo";
 
 export default function Page() {
-  return <List />;
+  return <ListCondos />;
 }

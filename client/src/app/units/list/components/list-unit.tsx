@@ -18,9 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, PlusCircle, ListFilter, File } from "lucide-react";
+import { Search, PlusCircle, File } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,11 +27,11 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuCheckboxItem,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Create as CreateUnit } from "../../create/components/create-unit";
 
 export type Unit = {
   id: number;
@@ -104,6 +103,7 @@ export const List = () => {
                 </span>
               </Button>
             </DialogTrigger>
+            <CreateUnit />
           </Dialog>
         </div>
       </div>
@@ -133,11 +133,8 @@ export const List = () => {
               <TableBody>
                 {filteredUnit.map((unit) => (
                   <TableRow key={unit.id}>
-                    <TableCell>
-                      <div className="font-medium">{}</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        {unit.bloco}
-                      </div>
+                    <TableCell className="hidden sm:table-cell">
+                      {unit.bloco}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       {unit.unidade}

@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, PlusCircle, ListFilter, File } from "lucide-react";
+import { Search, PlusCircle, File } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -27,42 +26,28 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuCheckboxItem,
-  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Create as CreateCondo } from "../../create/components/create-condo";
+import { Create as CreateCondo } from "../_components/create-condo";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Delete as DeleteCondo } from "../../delete/components/delete-condo";
+import { Delete as DeleteCondo } from "../_components/delete-condo";
 import { ReloadIcon } from "@radix-ui/react-icons";
-
-export type Condo = {
-  id: number;
-  razao_social: string;
-  logradouro: string;
-  numero_endereco: string;
-  complemento: string;
-  bairro: string;
-  localidade: string;
-  uf: string;
-  cep: string;
-  telefone: string;
-  cnpj: string;
-};
+import { Actions } from "../actions";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import { Update as UpdateCondo } from "./update-condo";
+import { CondoProps } from "../types";
 
 export const List = () => {
-  const [condos, setCondos] = useState<Condo[]>([]);
+  const [condos, setCondos] = useState<CondoProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  async function fetch() {
+  const fetchCondos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/condos");
-      const data = await response.data;
-
-      if (data) {
-        setCondos(data);
+      const condos = await Actions.getCondos();
+      if (condos) {
+        setCondos(condos);
         setLoading(false);
       } else {
         setCondos([]);
@@ -71,10 +56,10 @@ export const List = () => {
       console.error("Error fetch users:", error);
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetch();
+    fetchCondos();
   }, []);
 
   const filteredCondo = condos.filter((condo) =>
@@ -103,17 +88,17 @@ export const List = () => {
               Export
             </span>
           </Button>
-          <Dialog>
-            <DialogTrigger asChild>
+          <Sheet>
+            <SheetTrigger asChild>
               <Button size="sm" variant="outline" className="h-7 gap-1.5">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                   Add Condomínio
                 </span>
               </Button>
-            </DialogTrigger>
+            </SheetTrigger>
             <CreateCondo />
-          </Dialog>
+          </Sheet>
         </div>
       </div>
 
@@ -193,8 +178,13 @@ export const List = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <Button variant="ghost">Editar</Button>
+                          <Separator />
+                          <Sheet>
+                            <SheetTrigger asChild>
+                              <Button variant="ghost">Editar</Button>
+                            </SheetTrigger>
+                            <UpdateCondo condo={condo} />
+                          </Sheet>
                           <br />
                           <Dialog>
                             <DialogTrigger asChild>

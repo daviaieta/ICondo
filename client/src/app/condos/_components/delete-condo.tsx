@@ -12,8 +12,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { CondoProps } from "../types";
 
-type DeleteCondoProps = {
+export type DeleteCondoProps = {
   id: number;
   razaoSocial: string;
 };
@@ -30,8 +31,8 @@ export const Delete = ({ id, razaoSocial }: DeleteCondoProps) => {
       const response = await axios.post("http://localhost:5000/condos/delete", {
         id,
       });
-
-      if (response.data.status === 200) {
+      if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         toast({
           title: "Condomínio removido com sucesso",
           description: `Razão social: ${razaoSocial}`,
@@ -39,6 +40,8 @@ export const Delete = ({ id, razaoSocial }: DeleteCondoProps) => {
       }
     } catch (error) {
       console.log("deu pau");
+    } finally {
+      setSubmitting(false);
     }
   };
 

@@ -41,29 +41,38 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import {
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { CondoProps } from "../types";
 
-export const Create = () => {
-  const [razaoSocial, setRazaoSocial] = useState("");
-  const [logradouro, setLogradouro] = useState("");
-  const [numeroEndereco, setnumeroEndereco] = useState("");
-  const [complemento, setComplemento] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [localidade, setLocalidade] = useState("");
-  const [uf, setUf] = useState("");
-  const [cep, setCep] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [cnpj, setCnpj] = useState("");
+export type Condo = {
+  condo: CondoProps;
+};
 
+export const Update: React.FC<Condo> = ({ condo }) => {
+  const [razaoSocial, setRazaoSocial] = useState(condo.razao_social);
+  const [logradouro, setLogradouro] = useState(condo.logradouro);
+  const [numeroEndereco, setnumeroEndereco] = useState(condo.numero_endereco);
+  const [complemento, setComplemento] = useState(condo.complemento);
+  const [bairro, setBairro] = useState(condo.bairro);
+  const [localidade, setLocalidade] = useState(condo.localidade);
+  const [uf, setUf] = useState(condo.uf);
+  const [cep, setCep] = useState(condo.cep);
+  const [telefone, setTelefone] = useState(condo.telefone);
+  const [cnpj, setCnpj] = useState(condo.cnpj);
   const [submitting, setSubmitting] = useState(false);
-
   const { toast } = useToast();
 
-  const createCondo = async (e: any) => {
+  const updateCondo = async (e: any) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/condos/create", {
+      const response = await axios.post("http://localhost:5000/condos/update", {
         razao_social: razaoSocial,
         logradouro,
         numero_endereco: numeroEndereco,
@@ -75,29 +84,30 @@ export const Create = () => {
         telefone,
         cnpj,
       });
-
-      if (response.data.status === 200) {
+      if (response.status == 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         toast({
-          title: "Condomínio adiconado com sucesso",
+          title: "Condomínio editado com sucesso",
           description: `Razão social: ${razaoSocial}`,
         });
       }
     } catch (error) {
       console.log("deu pau");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Adicionar novo condomínio</DialogTitle>
-          <DialogDescription>
-            Preencha os campos abaixo para criar adicionar um novo condomínio no
-            sistema
-          </DialogDescription>
-        </DialogHeader>
-        <form className="space-y-4" onSubmit={createCondo}>
+      <SheetContent className="sm:max-w-[425px]">
+        <SheetHeader>
+          <SheetTitle>Editar {condo.razao_social}</SheetTitle>
+          <SheetDescription>
+            Preencha os campos abaixo para editar o {condo.razao_social} sistema
+          </SheetDescription>
+        </SheetHeader>
+        <form className="space-y-4" onSubmit={updateCondo}>
           <div className="grid gap-4 py-6">
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">
@@ -269,11 +279,11 @@ export const Create = () => {
           </div>
           <DialogFooter>
             <Button className="w-full" type="submit" disabled={submitting}>
-              {submitting ? <ReloadIcon className="animate-spin" /> : "Enviar"}
+              {submitting ? <ReloadIcon className="animate-spin" /> : "Editar"}
             </Button>
           </DialogFooter>
         </form>
-      </DialogContent>
+      </SheetContent>
     </>
   );
 };

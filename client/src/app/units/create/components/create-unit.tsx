@@ -41,229 +41,139 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 
+export type Condo = {
+  id: number;
+  razao_social: string;
+};
+
 export const Create = () => {
-  const [razaoSocial, setRazaoSocial] = useState("");
-  const [logradouro, setLogradouro] = useState("");
-  const [numeroEndereco, setnumeroEndereco] = useState("");
-  const [complemento, setComplemento] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [localidade, setLocalidade] = useState("");
-  const [uf, setUf] = useState("");
-  const [cep, setCep] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [cnpj, setCnpj] = useState("");
+  const [bloco, setBloco] = useState("");
+  const [unidade, setUnidade] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [condominio, setCondominio] = useState("");
+  const [condominios, setCondominios] = useState<Condo[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
 
   const { toast } = useToast();
 
-  const createCondo = async (e: any) => {
+  async function fetch() {
+    try {
+      const response = await axios.get("http://localhost:5000/condos");
+      const data = await response.data;
+
+      if (data) {
+        setCondominios(data);
+      } else {
+        setCondominios([]);
+      }
+    } catch (error) {
+      console.error("Error fetch users:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  const createUnit = async (e: any) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/condos/create", {
-        razao_social: razaoSocial,
-        logradouro,
-        numero_endereco: numeroEndereco,
-        complemento,
-        bairro,
-        localidade,
-        uf,
-        cep,
-        telefone,
-        cnpj,
+      const response = await axios.post("http://localhost:5000/units/create", {
+        bloco,
+        unidade,
+        tipo,
+        condominio: Number(condominio),
       });
 
-      if (response.data.status === 200) {
+      if (response.status == 200) {
         toast({
-          title: "Condomínio adiconado com sucesso",
-          description: `Razão social: ${razaoSocial}`,
+          title: "Unidade adiconada com sucesso",
         });
       }
     } catch (error) {
       console.log("deu pau");
     }
   };
+  console.log(Number(condominio));
 
   return (
     <>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Adicionar novo condomínio</DialogTitle>
+          <DialogTitle>Adicionar nova unidade</DialogTitle>
           <DialogDescription>
-            Preencha os campos abaixo para criar adicionar um novo condomínio no
+            Preencha os campos abaixo para criar adicionar uma nova unidade no
             sistema
           </DialogDescription>
         </DialogHeader>
-        <form className="space-y-4" onSubmit={createCondo}>
+        <form className="space-y-4" onSubmit={createUnit}>
           <div className="grid gap-4 py-6">
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">
-                Razão Social
+                Bloco
               </Label>
               <Input
                 id="name"
                 className="col-span-3"
-                value={razaoSocial}
+                value={bloco}
                 onChange={(e) => {
-                  setRazaoSocial(e.target.value);
+                  setBloco(e.target.value);
                 }}
                 required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">
-                Logradouro
+                Unidade
               </Label>
               <Input
                 id="name"
                 className="col-span-3"
-                value={logradouro}
+                value={unidade}
                 onChange={(e) => {
-                  setLogradouro(e.target.value);
+                  setUnidade(e.target.value);
                 }}
                 required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">
-                Número
+                Tipo
               </Label>
               <Input
                 id="name"
                 className="col-span-3"
-                value={numeroEndereco}
+                value={tipo}
                 onChange={(e) => {
-                  setnumeroEndereco(e.target.value);
+                  setTipo(e.target.value);
                 }}
                 required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">
-                Complemento
+                Condominio
               </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={complemento}
-                onChange={(e) => {
-                  setComplemento(e.target.value);
-                }}
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                Bairro
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={bairro}
-                onChange={(e) => {
-                  setBairro(e.target.value);
-                }}
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                Localidade
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={localidade}
-                onChange={(e) => {
-                  setLocalidade(e.target.value);
-                }}
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="uf" className="text-right">
-                UF
-              </Label>
-              <Select onValueChange={setUf}>
+              <Select onValueChange={setCondominio}>
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Seleciona a UF" />
+                  <SelectValue placeholder="Selecione um condo" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="AC">Acre</SelectItem>
-                    <SelectItem value="AL">Alagoas</SelectItem>
-                    <SelectItem value="AP">Amapá</SelectItem>
-                    <SelectItem value="AM">Amazonas</SelectItem>
-                    <SelectItem value="BA">Bahia</SelectItem>
-                    <SelectItem value="CE">Ceará</SelectItem>
-                    <SelectItem value="DF">Distrito Federal</SelectItem>
-                    <SelectItem value="ES">Espírito Santo</SelectItem>
-                    <SelectItem value="GO">Goiás</SelectItem>
-                    <SelectItem value="MA">Maranhão</SelectItem>
-                    <SelectItem value="MT">Mato Grosso</SelectItem>
-                    <SelectItem value="MS">Mato Grosso do Sul</SelectItem>
-                    <SelectItem value="MG">Minas Gerais</SelectItem>
-                    <SelectItem value="PA">Pará</SelectItem>
-                    <SelectItem value="PB">Paraíba</SelectItem>
-                    <SelectItem value="PR">Paraná</SelectItem>
-                    <SelectItem value="PE">Pernambuco</SelectItem>
-                    <SelectItem value="PI">Piauí</SelectItem>
-                    <SelectItem value="RJ">Rio de Janeiro</SelectItem>
-                    <SelectItem value="RN">Rio Grande do Norte</SelectItem>
-                    <SelectItem value="RS">Rio Grande do Sul</SelectItem>
-                    <SelectItem value="RO">Rondônia</SelectItem>
-                    <SelectItem value="RR">Roraima</SelectItem>
-                    <SelectItem value="SC">Santa Catarina</SelectItem>
-                    <SelectItem value="SP">São Paulo</SelectItem>
-                    <SelectItem value="SE">Sergipe</SelectItem>
-                    <SelectItem value="TO">Tocantins</SelectItem>
+                    {condominios.map((condominio) => (
+                      <SelectItem
+                        key={condominio.id}
+                        value={condominio.id.toString()}
+                      >
+                        {condominio.razao_social}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                CEP
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={cep}
-                onChange={(e) => {
-                  setCep(e.target.value);
-                }}
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                Telefone
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={telefone}
-                onChange={(e) => {
-                  setTelefone(e.target.value);
-                }}
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                CNPJ
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={cnpj}
-                onChange={(e) => {
-                  setCnpj(e.target.value);
-                }}
-                required
-              />
             </div>
           </div>
           <DialogFooter>
