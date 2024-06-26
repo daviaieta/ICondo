@@ -12,12 +12,12 @@ export class CondoController {
   }
 
   static async create(req: Request, res: Response) {
-    const condo = req.body
     try {
-      await prisma.condominio.create({
+      const condo = req.body
+      const createdCondo = await prisma.condominio.create({
         data: condo,
       })
-      return res.send(condo)
+      return res.send(createdCondo)
     } catch (error) {
       console.log(error)
       return res.status(400).json({ error })
@@ -25,8 +25,8 @@ export class CondoController {
   }
 
   static async delete(req: Request, res: Response) {
-    const condoId = req.body.id
     try {
+      const condoId = req.body.id
       await prisma.condominio.delete({
         where: { id: condoId },
       })
@@ -35,4 +35,21 @@ export class CondoController {
       return res.status(400).json({ error })
     }
   }
+
+  static async update(req: Request, res: Response) {
+    try {
+      const condo = req.body
+
+      const updatedCondo = await prisma.condominio.update({
+        where: { id: condo.id },
+        data: condo,
+      })
+
+      return res.status(200).json(updatedCondo)
+    } catch (error) {
+      return res.status(400).json({ error })
+    }
+  }
+
+  static async exportCsv(req: Request, res: Response) {}
 }

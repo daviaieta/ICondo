@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   DialogContent,
   DialogDescription,
@@ -17,9 +17,10 @@ import { CondoProps } from "../types";
 export type DeleteCondoProps = {
   id: number;
   razaoSocial: string;
+  setCondos: Dispatch<SetStateAction<CondoProps[]>>;
 };
 
-export const Delete = ({ id, razaoSocial }: DeleteCondoProps) => {
+export const Delete = ({ id, razaoSocial, setCondos }: DeleteCondoProps) => {
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -37,6 +38,9 @@ export const Delete = ({ id, razaoSocial }: DeleteCondoProps) => {
           title: "Condomínio removido com sucesso",
           description: `Razão social: ${razaoSocial}`,
         });
+        setCondos((prevCondos) =>
+          prevCondos.filter((prevCondo) => prevCondo.id !== id)
+        );
       }
     } catch (error) {
       console.log("deu pau");

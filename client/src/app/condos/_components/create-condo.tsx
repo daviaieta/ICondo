@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -46,8 +46,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { CondoProps } from "../types";
 
-export const Create = () => {
+export type Condo = {
+  setCondos: Dispatch<SetStateAction<CondoProps[]>>;
+};
+
+export const Create = ({ setCondos }: Condo) => {
   const [razaoSocial, setRazaoSocial] = useState("");
   const [logradouro, setLogradouro] = useState("");
   const [numeroEndereco, setnumeroEndereco] = useState("");
@@ -84,6 +89,7 @@ export const Create = () => {
           title: "Condomínio adiconado com sucesso",
           description: `Razão social: ${razaoSocial}`,
         });
+        setCondos((prevCondos) => [...prevCondos, response.data]);
       }
     } catch (error) {
       console.log("deu pau");

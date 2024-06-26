@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -51,16 +51,18 @@ import { CondoProps } from "../types";
 
 export type Condo = {
   condo: CondoProps;
+  setCondos: Dispatch<SetStateAction<CondoProps[]>>;
 };
 
-export const Update: React.FC<Condo> = ({ condo }) => {
+export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
+  const [id, setId] = useState(condo.id);
   const [razaoSocial, setRazaoSocial] = useState(condo.razao_social);
   const [logradouro, setLogradouro] = useState(condo.logradouro);
   const [numeroEndereco, setnumeroEndereco] = useState(condo.numero_endereco);
   const [complemento, setComplemento] = useState(condo.complemento);
   const [bairro, setBairro] = useState(condo.bairro);
   const [localidade, setLocalidade] = useState(condo.localidade);
-  const [uf, setUf] = useState(condo.uf);
+  const [uf, setUf] = useState(condo.uf.toUpperCase());
   const [cep, setCep] = useState(condo.cep);
   const [telefone, setTelefone] = useState(condo.telefone);
   const [cnpj, setCnpj] = useState(condo.cnpj);
@@ -73,6 +75,7 @@ export const Update: React.FC<Condo> = ({ condo }) => {
 
     try {
       const response = await axios.post("http://localhost:5000/condos/update", {
+        id,
         razao_social: razaoSocial,
         logradouro,
         numero_endereco: numeroEndereco,
@@ -90,6 +93,12 @@ export const Update: React.FC<Condo> = ({ condo }) => {
           title: "Condomínio editado com sucesso",
           description: `Razão social: ${razaoSocial}`,
         });
+        setCondos((prevCondos) =>
+          prevCondos.map((prevCondo) => {
+            if (condo.id == prevCondo.id) return response.data;
+            return prevCondo;
+          })
+        );
       }
     } catch (error) {
       console.log("deu pau");
@@ -97,7 +106,6 @@ export const Update: React.FC<Condo> = ({ condo }) => {
       setSubmitting(false);
     }
   };
-
   return (
     <>
       <SheetContent className="sm:max-w-[425px]">
@@ -197,7 +205,7 @@ export const Update: React.FC<Condo> = ({ condo }) => {
               <Label htmlFor="uf" className="text-right">
                 UF
               </Label>
-              <Select onValueChange={setUf}>
+              <Select onValueChange={setUf} value={uf}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Seleciona a UF" />
                 </SelectTrigger>

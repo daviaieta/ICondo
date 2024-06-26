@@ -14,7 +14,6 @@ export class UnitController {
   static async createUnit(req: Request, res: Response) {
     try {
       const unit = req.body
-      console.log(unit.condominio)
       await prisma.unidade.create({
         data: {
           ...unit,

@@ -37,23 +37,29 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Update as UpdateCondo } from "./update-condo";
 import { CondoProps } from "../types";
+import { fetchAdapter } from "@/adapters/fetchAdapter";
+import { useToast } from "@/components/ui/use-toast";
 
 export const List = () => {
   const [condos, setCondos] = useState<CondoProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const { toast } = useToast();
 
   const fetchCondos = async () => {
     try {
-      const condos = await Actions.getCondos();
-      if (condos) {
-        setCondos(condos);
+      const condos = await fetchAdapter({
+        method: "GET",
+        path: "condos",
+      });
+      if (condos.status == 200) {
+        setCondos(condos.data);
         setLoading(false);
-      } else {
-        setCondos([]);
       }
     } catch (error) {
-      console.error("Error fetch users:", error);
+      toast({
+        title: "Error",
+      });
       setLoading(false);
     }
   };
@@ -85,7 +91,7 @@ export const List = () => {
           <Button size="sm" variant="outline" className="h-7 gap-1">
             <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Export
+              Exportar CSV
             </span>
           </Button>
           <Sheet>
@@ -97,7 +103,7 @@ export const List = () => {
                 </span>
               </Button>
             </SheetTrigger>
-            <CreateCondo />
+            <CreateCondo setCondos={setCondos} />
           </Sheet>
         </div>
       </div>
@@ -183,7 +189,7 @@ export const List = () => {
                             <SheetTrigger asChild>
                               <Button variant="ghost">Editar</Button>
                             </SheetTrigger>
-                            <UpdateCondo condo={condo} />
+                            <UpdateCondo condo={condo} setCondos={setCondos} />
                           </Sheet>
                           <br />
                           <Dialog>
@@ -193,6 +199,7 @@ export const List = () => {
                             <DeleteCondo
                               id={Number(condo.id)}
                               razaoSocial={condo.razao_social}
+                              setCondos={setCondos}
                             />
                           </Dialog>
                         </DropdownMenuContent>
