@@ -88,7 +88,6 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
         cnpj,
       });
       if (response.status == 200) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         toast({
           title: "Condomínio editado com sucesso",
           description: `Razão social: ${razaoSocial}`,

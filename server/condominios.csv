@@ -1,0 +1,5 @@
+id,razao_social,logradouro,numero_endereco,complemento,bairro,localidade,uf,cep,telefone,cnpj
+1,Village Vert,Estrada do Bananal,721,sem complemento,freguesia,rio de janeiro,RJ,22750012,99999999999,123123123
+13,Village Florença,Estrada do Bananal,720,Não tem,Freguesia,Rio de Janeiro,RJ,22.750-011,2199999999,121212121212
+14,Freedom,Est Do Guanumbi,230,Sem complemento,Freguesia,Rio de Janeiro,RJ,22745200,999999999,123123123
+24,Burgone,Est Do Guanumbi,279,sem complemento,freguesia,Rio de Janeiro,RJ,22745200,123,123

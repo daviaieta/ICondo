@@ -64,9 +64,37 @@ export const List = () => {
     }
   };
 
+  const fetchExportCsv = async () => {
+    try {
+      const res = await fetchAdapter({
+        method: "GET",
+        path: "condos/export-csv",
+      });
+      if (res.status == 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "condominios.csv");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        toast({
+          title: "Sucesso ao baixar CSV",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+      });
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchCondos();
   }, []);
+
+  console.log(condos);
 
   const filteredCondo = condos.filter((condo) =>
     condo.razao_social.toLowerCase().includes(search.toLowerCase())
@@ -88,7 +116,12 @@ export const List = () => {
           </div>
         </form>
         <div className="ml-auto flex items-center gap-2">
-          <Button size="sm" variant="outline" className="h-7 gap-1">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 gap-1"
+            onClick={fetchExportCsv}
+          >
             <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
               Exportar CSV

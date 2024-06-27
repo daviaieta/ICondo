@@ -84,7 +84,6 @@ export const Create = ({ setCondos }: Condo) => {
         cnpj,
       });
       if (response.status == 200) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         toast({
           title: "Condomínio adiconado com sucesso",
           description: `Razão social: ${razaoSocial}`,

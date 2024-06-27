@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { prisma } from '../lib/prisma'
+import * as fastcsv from 'fast-csv'
+import * as stream from 'stream'
 
 export class CondoController {
   static async list(req: Request, res: Response) {
@@ -51,5 +53,23 @@ export class CondoController {
     }
   }
 
-  static async exportCsv(req: Request, res: Response) {}
+  static async exportCsv(req: Request, res: Response) {
+    try {
+      const condos = await prisma.condominio.findMany({})
+
+      const csvStream = fastcsv.format({ headers: true })
+      const readStream = new stream.PassThrough()
+      readStream.end(JSON.stringify(condos))
+
+      res.setHeader('Content-Disposition', 'attachment; filename=condominios.csv')
+      res.setHeader('Content-Type', 'text/csv')
+
+      csvStream.pipe(res)
+      condos.forEach((condo) => csvStream.write(condo))
+      csvStream.end()
+    } catch (error) {
+      console.log(error)
+      return res.status(400).json({ error })
+    }
+  }
 }

@@ -33,7 +33,6 @@ export const Delete = ({ id, razaoSocial, setCondos }: DeleteCondoProps) => {
         id,
       });
       if (response.status === 200) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         toast({
           title: "Condomínio removido com sucesso",
           description: `Razão social: ${razaoSocial}`,
