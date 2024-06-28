@@ -1,33 +1,6 @@
 "use client";
-
-import axios from "axios";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Search } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Input } from "@/components/ui/input";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -43,10 +16,13 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import {
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
 import { CondoProps } from "../types";
+import { fetchAdapter } from "@/adapters/fetchAdapter";
+import { Frown } from "lucide-react";
 
 export type Condo = {
   setCondos: Dispatch<SetStateAction<CondoProps[]>>;
@@ -71,17 +47,21 @@ export const Create = ({ setCondos }: Condo) => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/condos/create", {
-        razao_social: razaoSocial,
-        logradouro,
-        numero_endereco: numeroEndereco,
-        complemento,
-        bairro,
-        localidade,
-        uf,
-        cep,
-        telefone,
-        cnpj,
+      const response = await fetchAdapter({
+        method: "POST",
+        path: "condos/create",
+        body: {
+          razao_social: razaoSocial,
+          logradouro,
+          numero_endereco: numeroEndereco,
+          complemento,
+          bairro,
+          localidade,
+          uf,
+          cep,
+          telefone,
+          cnpj,
+        },
       });
       if (response.status == 200) {
         toast({
@@ -91,7 +71,10 @@ export const Create = ({ setCondos }: Condo) => {
         setCondos((prevCondos) => [...prevCondos, response.data]);
       }
     } catch (error) {
-      console.log("deu pau");
+      toast({
+        title: `Erro`,
+        description: `Ocorreu um erro ao criar ${razaoSocial}, por favor contatar o suporte`,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -103,7 +86,7 @@ export const Create = ({ setCondos }: Condo) => {
         <SheetHeader>
           <SheetTitle>Adicionar novo condomínio</SheetTitle>
           <SheetDescription>
-            Preencha os campos abaixo para cadastrar um novo condomínio no
+            Preencha os campos abaixo para adicionar um novo condomínio no
             sistema
           </SheetDescription>
         </SheetHeader>
@@ -277,15 +260,20 @@ export const Create = ({ setCondos }: Condo) => {
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button className="w-full" type="submit" disabled={submitting}>
+          <SheetFooter>
+            <Button
+              className="w-full"
+              type="submit"
+              variant="outline"
+              disabled={submitting}
+            >
               {submitting ? (
                 <ReloadIcon className="animate-spin" />
               ) : (
                 "Cadastrar"
               )}
             </Button>
-          </DialogFooter>
+          </SheetFooter>
         </form>
       </SheetContent>
     </>

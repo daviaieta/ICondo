@@ -48,6 +48,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { CondoProps } from "../types";
+import { fetchAdapter } from "@/adapters/fetchAdapter";
 
 export type Condo = {
   condo: CondoProps;
@@ -74,18 +75,22 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/condos/update", {
-        id,
-        razao_social: razaoSocial,
-        logradouro,
-        numero_endereco: numeroEndereco,
-        complemento,
-        bairro,
-        localidade,
-        uf,
-        cep,
-        telefone,
-        cnpj,
+      const response = await fetchAdapter({
+        method: "POST",
+        path: "condos/update",
+        body: {
+          id,
+          razao_social: razaoSocial,
+          logradouro,
+          numero_endereco: numeroEndereco,
+          complemento,
+          bairro,
+          localidade,
+          uf,
+          cep,
+          telefone,
+          cnpj,
+        },
       });
       if (response.status == 200) {
         toast({
@@ -100,7 +105,10 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
         );
       }
     } catch (error) {
-      console.log("deu pau");
+      toast({
+        title: `Erro`,
+        description: `Ocorreu um erro ao editar ${razaoSocial} condomínios, por favor contatar o suporte`,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -111,7 +119,7 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
         <SheetHeader>
           <SheetTitle>Editar {condo.razao_social}</SheetTitle>
           <SheetDescription>
-            Preencha os campos abaixo para editar o {condo.razao_social} sistema
+            Preencha os campos abaixo para editar {condo.razao_social}
           </SheetDescription>
         </SheetHeader>
         <form className="space-y-4" onSubmit={updateCondo}>
@@ -285,7 +293,12 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
             </div>
           </div>
           <DialogFooter>
-            <Button className="w-full" type="submit" disabled={submitting}>
+            <Button
+              className="w-full"
+              type="submit"
+              variant="outline"
+              disabled={submitting}
+            >
               {submitting ? <ReloadIcon className="animate-spin" /> : "Editar"}
             </Button>
           </DialogFooter>

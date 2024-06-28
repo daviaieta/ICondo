@@ -31,22 +31,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Create as CreateUnit } from "../../create/components/create-unit";
-
-export type Unit = {
-  id: number;
-  bloco: string;
-  unidade: string;
-  tipo: string;
-  condominioId: number;
-};
+import { Create as CreateUnit } from "./create-unit";
+import { UnitProps } from "../types";
 
 export const List = () => {
-  const [units, setUnit] = useState<Unit[]>([]);
+  const [units, setUnit] = useState<UnitProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  async function fetch() {
+  async function fetchUnits() {
     try {
       const response = await axios.get("http://localhost:5000/units");
       const data = await response.data;
@@ -65,7 +58,7 @@ export const List = () => {
   }
 
   useEffect(() => {
-    fetch();
+    fetchUnits();
   }, []);
 
   const filteredUnit = units.filter((unit) =>

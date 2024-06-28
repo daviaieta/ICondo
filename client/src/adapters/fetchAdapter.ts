@@ -3,12 +3,12 @@ import axios from "axios";
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export const fetchAdapter = async ({
-  path,
   method,
+  path,
   body,
 }: {
-  path: string;
   method: HttpMethod;
+  path: string;
   body?: Record<any, any>;
 }) => {
   const res = await axios({

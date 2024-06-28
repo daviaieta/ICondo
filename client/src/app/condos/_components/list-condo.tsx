@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, PlusCircle, File } from "lucide-react";
+import { Search, PlusCircle, File, Frown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,7 @@ import { Update as UpdateCondo } from "./update-condo";
 import { CondoProps } from "../types";
 import { fetchAdapter } from "@/adapters/fetchAdapter";
 import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export const List = () => {
   const [condos, setCondos] = useState<CondoProps[]>([]);
@@ -58,7 +59,8 @@ export const List = () => {
       }
     } catch (error) {
       toast({
-        title: "Error",
+        title: `Erro`,
+        description: `Ocorreu um erro ao carregar os condomínios, por favor contatar o suporte`,
       });
       setLoading(false);
     }
@@ -84,7 +86,8 @@ export const List = () => {
       }
     } catch (error) {
       toast({
-        title: "Error",
+        title: `Ocorreu algum erro ${(<Frown />)}`,
+        description: `Por favor contatar um administrador`,
       });
       setLoading(false);
     }

@@ -8,11 +8,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { CondoProps } from "../types";
+import { fetchAdapter } from "@/adapters/fetchAdapter";
+import { Frown } from "lucide-react";
 
 export type DeleteCondoProps = {
   id: number;
@@ -29,8 +32,12 @@ export const Delete = ({ id, razaoSocial, setCondos }: DeleteCondoProps) => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/condos/delete", {
-        id,
+      const response = await fetchAdapter({
+        method: "POST",
+        path: "condos/delete",
+        body: {
+          id,
+        },
       });
       if (response.status === 200) {
         toast({
@@ -42,7 +49,10 @@ export const Delete = ({ id, razaoSocial, setCondos }: DeleteCondoProps) => {
         );
       }
     } catch (error) {
-      console.log("deu pau");
+      toast({
+        title: `Erro`,
+        description: `Ocorreu um erro ao deletar ${razaoSocial} condomínios, por favor contatar o suporte`,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -50,20 +60,16 @@ export const Delete = ({ id, razaoSocial, setCondos }: DeleteCondoProps) => {
 
   return (
     <>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[450px] h-[130px]">
         <DialogHeader>
-          <DialogTitle>Remover Condomínio</DialogTitle>
-          <DialogDescription>Remover {razaoSocial}</DialogDescription>
+          <DialogTitle>
+            Tem certeza que deseja remover {razaoSocial}?
+          </DialogTitle>
         </DialogHeader>
         <form className="space-y-4" onSubmit={deleteCondo}>
           <DialogFooter>
-            <Button
-              className="w-full"
-              type="submit"
-              variant="destructive"
-              disabled={submitting}
-            >
-              {submitting ? <ReloadIcon className="animate-spin" /> : "Remover"}
+            <Button className="w-full" type="submit" variant="destructive">
+              {submitting ? <ReloadIcon className="animate-spin" /> : "Sim"}
             </Button>
           </DialogFooter>
         </form>
