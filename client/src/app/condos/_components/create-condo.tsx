@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/sheet";
 import { CondoProps } from "../types";
 import { fetchAdapter } from "@/adapters/fetchAdapter";
-import { Frown } from "lucide-react";
 
 export type Condo = {
   setCondos: Dispatch<SetStateAction<CondoProps[]>>;
@@ -63,6 +62,7 @@ export const Create = ({ setCondos }: Condo) => {
           cnpj,
         },
       });
+      console.log(response.data);
       if (response.status == 200) {
         toast({
           title: "Condomínio adiconado com sucesso",

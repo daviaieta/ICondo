@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -30,29 +29,35 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Create as CreateUnit } from "./create-unit";
 import { UnitProps } from "../types";
+import { fetchAdapter } from "@/adapters/fetchAdapter";
+import { useToast } from "@/components/ui/use-toast";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 export const List = () => {
-  const [units, setUnit] = useState<UnitProps[]>([]);
+  const [units, setUnits] = useState<UnitProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const { toast } = useToast();
 
   async function fetchUnits() {
     try {
-      const response = await axios.get("http://localhost:5000/units");
-      const data = await response.data;
-
-      if (data) {
-        setUnit(data);
-        console.log(data);
+      const response = await fetchAdapter({
+        method: "GET",
+        path: "units",
+      });
+      if (response.status == 200) {
+        setUnits(response.data);
         setLoading(false);
-      } else {
-        setUnit([]);
       }
     } catch (error) {
-      console.error("Error fetch  ing users:", error);
+      toast({
+        title: `Erro`,
+        description: `Ocorreu um erro ao carregar as unidades, por favor contatar o suporte`,
+      });
       setLoading(false);
     }
   }
@@ -61,8 +66,10 @@ export const List = () => {
     fetchUnits();
   }, []);
 
-  const filteredUnit = units.filter((unit) =>
-    unit.condominioId.toString().includes(search.toLowerCase())
+  const filteredUnit = units.filter(
+    (unit) =>
+      unit.condominioId &&
+      unit.condominioId.toString().includes(search.toLowerCase())
   );
 
   return (
@@ -84,20 +91,20 @@ export const List = () => {
           <Button size="sm" variant="outline" className="h-7 gap-1">
             <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Export
+              Exportar CSV
             </span>
           </Button>
-          <Dialog>
-            <DialogTrigger asChild>
+          <Sheet>
+            <SheetTrigger asChild>
               <Button size="sm" variant="outline" className="h-7 gap-1.5">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Add Unidade
+                  Add Condomínio
                 </span>
               </Button>
-            </DialogTrigger>
-            <CreateUnit />
-          </Dialog>
+            </SheetTrigger>
+            <CreateUnit setUnits={setUnits} />
+          </Sheet>
         </div>
       </div>
 
@@ -150,9 +157,18 @@ export const List = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>Editar</DropdownMenuItem>
-                          <DropdownMenuItem>Excluir</DropdownMenuItem>
+                          <Separator />
+                          <Sheet>
+                            <SheetTrigger asChild>
+                              <Button variant="ghost">Editar</Button>
+                            </SheetTrigger>
+                          </Sheet>
+                          <br />
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="ghost">Excluir</Button>
+                            </DialogTrigger>
+                          </Dialog>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

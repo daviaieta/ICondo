@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/table";
 import { Search, PlusCircle, File, Frown } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -32,14 +31,12 @@ import { Create as CreateCondo } from "../_components/create-condo";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Delete as DeleteCondo } from "../_components/delete-condo";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { Actions } from "../actions";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Update as UpdateCondo } from "./update-condo";
 import { CondoProps } from "../types";
 import { fetchAdapter } from "@/adapters/fetchAdapter";
 import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 
 export const List = () => {
   const [condos, setCondos] = useState<CondoProps[]>([]);
@@ -49,12 +46,12 @@ export const List = () => {
 
   const fetchCondos = async () => {
     try {
-      const condos = await fetchAdapter({
+      const response = await fetchAdapter({
         method: "GET",
         path: "condos",
       });
-      if (condos.status == 200) {
-        setCondos(condos.data);
+      if (response.status == 200) {
+        setCondos(response.data);
         setLoading(false);
       }
     } catch (error) {
@@ -68,12 +65,12 @@ export const List = () => {
 
   const fetchExportCsv = async () => {
     try {
-      const res = await fetchAdapter({
+      const response = await fetchAdapter({
         method: "GET",
         path: "condos/export-csv",
       });
-      if (res.status == 200) {
-        const url = window.URL.createObjectURL(new Blob([res.data]));
+      if (response.status == 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", "condominios.csv");

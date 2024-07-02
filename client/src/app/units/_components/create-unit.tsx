@@ -1,33 +1,7 @@
 "use client";
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Search } from "lucide-react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -35,80 +9,102 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { fetchAdapter } from "@/adapters/fetchAdapter";
+import {
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { UnitProps } from "../types";
 
 export type Condo = {
   id: number;
   razao_social: string;
 };
 
-export const Create = () => {
+export type Units = {
+  setUnits: Dispatch<SetStateAction<UnitProps[]>>;
+};
+
+export const Create = ({ setUnits }: Units) => {
   const [bloco, setBloco] = useState("");
   const [unidade, setUnidade] = useState("");
   const [tipo, setTipo] = useState("");
-  const [condominio, setCondominio] = useState("");
-  const [condominios, setCondominios] = useState<Condo[]>([]);
+  const [condo, setCondo] = useState("");
+  const [condos, setCondos] = useState<Condo[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
 
   const { toast } = useToast();
 
-  async function fetch() {
+  const fetchCondos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/condos");
-      const data = await response.data;
-
-      if (data) {
-        setCondominios(data);
-      } else {
-        setCondominios([]);
+      const response = await fetchAdapter({
+        method: "GET",
+        path: "condos",
+      });
+      if (response.status == 200) {
+        setCondos(response.data);
       }
     } catch (error) {
-      console.error("Error fetch users:", error);
+      toast({
+        title: `Erro`,
+        description: `Ocorreu um erro ao carregar os condomínios, por favor contatar o suporte`,
+      });
     }
-  }
-
-  useEffect(() => {
-    fetch();
-  }, []);
+  };
 
   const createUnit = async (e: any) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/units/create", {
-        bloco,
-        unidade,
-        tipo,
-        condominio: Number(condominio),
+      const response = await fetchAdapter({
+        method: "POST",
+        path: "units/create",
+        body: {
+          bloco,
+          unidade,
+          tipo,
+          condominioId: Number(condo),
+        },
       });
-
       if (response.status == 200) {
         toast({
           title: "Unidade adiconada com sucesso",
         });
+        setUnits((prevUnits) => [...prevUnits, response.data]);
       }
     } catch (error) {
-      console.log("deu pau");
+      toast({
+        title: `Erro`,
+        description: `Ocorreu um erro ao cadastrar a unidade, por favor contatar o suporte`,
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
-  console.log(Number(condominio));
+
+  useEffect(() => {
+    fetchCondos();
+  }, []);
 
   return (
     <>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Adicionar nova unidade</DialogTitle>
-          <DialogDescription>
+      <SheetContent className="sm:max-w-[425px]">
+        <SheetHeader>
+          <SheetTitle>Adicionar nova unidade</SheetTitle>
+          <SheetDescription>
             Preencha os campos abaixo para criar adicionar uma nova unidade no
             sistema
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
         <form className="space-y-4" onSubmit={createUnit}>
           <div className="grid gap-4 py-6">
             <div className="grid grid-cols-4 items-center gap-2">
@@ -155,20 +151,17 @@ export const Create = () => {
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">
-                Condominio
+                Condomínio
               </Label>
-              <Select onValueChange={setCondominio}>
+              <Select onValueChange={setCondo}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Selecione um condo" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {condominios.map((condominio) => (
-                      <SelectItem
-                        key={condominio.id}
-                        value={condominio.id.toString()}
-                      >
-                        {condominio.razao_social}
+                    {condos.map((condo) => (
+                      <SelectItem key={condo.id} value={condo.id.toString()}>
+                        {condo.razao_social}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -176,13 +169,18 @@ export const Create = () => {
               </Select>
             </div>
           </div>
-          <DialogFooter>
-            <Button className="w-full" type="submit" disabled={submitting}>
-              {submitting ? "Loading..." : "Enviar"}
+          <SheetFooter>
+            <Button
+              className="w-full"
+              type="submit"
+              variant="outline"
+              disabled={submitting}
+            >
+              {submitting ? "Loading..." : "Cadastrar"}
             </Button>
-          </DialogFooter>
+          </SheetFooter>
         </form>
-      </DialogContent>
+      </SheetContent>
     </>
   );
 };
