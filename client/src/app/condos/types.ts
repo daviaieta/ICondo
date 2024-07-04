@@ -10,4 +10,5 @@ export type CondoProps = {
   cep: string;
   telefone: string;
   cnpj: string;
+  createdAt: number;
 };

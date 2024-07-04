@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Condominio {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   razao_social    String
   logradouro      String
   numero_endereco String
@@ -19,15 +19,17 @@ model Condominio {
   cep             String
   telefone        String
   cnpj            String
+  createdAt       DateTime @default(now())
 
   units Unidade[]
 }
 
 model Unidade {
-  id      Int    @id @default(autoincrement())
-  bloco   String
-  unidade String
-  tipo    String
+  id        Int      @id @default(autoincrement())
+  bloco     String
+  unidade   String
+  tipo      String
+  createdAt DateTime @default(now())
 
   Condominio   Condominio @relation(fields: [condominioId], references: [id])
   condominioId Int
@@ -51,10 +53,8 @@ model User {
   primeiro_acesso String
   senha           String
   token           String   @unique
-
-  cargo UserRole @default(USER)
-
-  createdAt DateTime @default(now())
+  cargo           UserRole @default(USER)
+  createdAt       DateTime @default(now())
 
   Unidade   Unidade @relation(fields: [unidadeId], references: [id])
   unidadeId Int
@@ -67,6 +67,7 @@ model Encomenda {
   date_time_entry     DateTime
   date_time_departure DateTime
   protocolo           String
+  createdAt           DateTime @default(now())
 
   Unidade   Unidade @relation(fields: [unidadeId], references: [id])
   unidadeId Int

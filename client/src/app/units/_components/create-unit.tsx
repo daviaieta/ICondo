@@ -139,15 +139,21 @@ export const Create = ({ setUnits }: Units) => {
               <Label htmlFor="name" className="text-right">
                 Tipo
               </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={tipo}
-                onChange={(e) => {
-                  setTipo(e.target.value);
-                }}
-                required
-              />
+              <Select onValueChange={setTipo}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Selecione um tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="casa">Casa</SelectItem>
+                    <SelectItem value="apartamento">Apartamento</SelectItem>
+                    <SelectItem value="cobertura">Cobertura</SelectItem>
+                    <SelectItem value="quarto">Quarto</SelectItem>
+                    <SelectItem value="sala">Sala</SelectItem>
+                    <SelectItem value="outro">Outro</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">

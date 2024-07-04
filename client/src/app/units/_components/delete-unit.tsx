@@ -13,44 +13,44 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { CondoProps } from "../types";
+import { UnitProps } from "../types";
 import { fetchAdapter } from "@/adapters/fetchAdapter";
 
-export type DeleteCondoProps = {
+export type DeleteUnitProps = {
   id: number;
-  razaoSocial: string;
-  setCondos: Dispatch<SetStateAction<CondoProps[]>>;
+  unidade: string;
+  setUnits: Dispatch<SetStateAction<UnitProps[]>>;
 };
 
-export const Delete = ({ id, razaoSocial, setCondos }: DeleteCondoProps) => {
+export const Delete = ({ id, unidade, setUnits }: DeleteUnitProps) => {
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const deleteCondo = async (e: any) => {
+  const deleteUnit = async (e: any) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
       const response = await fetchAdapter({
         method: "POST",
-        path: "condos/delete",
+        path: "units/delete",
         body: {
           id,
         },
       });
       if (response.status === 200) {
         toast({
-          title: "Condomínio removido com sucesso",
-          description: `Razão social: ${razaoSocial}`,
+          title: "Unidade removida com sucesso",
+          description: `Unidade: ${unidade}`,
         });
-        setCondos((prevCondos) =>
-          prevCondos.filter((prevCondo) => prevCondo.id !== id)
+        setUnits((prevUnits) =>
+          prevUnits.filter((prevUnit) => prevUnit.id !== id)
         );
       }
     } catch (error) {
       toast({
         title: `Erro`,
-        description: `Ocorreu um erro ao deletar ${razaoSocial} condomínios, por favor contatar o suporte`,
+        description: `Ocorreu um erro ao deletar a unidade ${unidade}, por favor contatar o suporte`,
       });
     } finally {
       setSubmitting(false);
@@ -59,13 +59,13 @@ export const Delete = ({ id, razaoSocial, setCondos }: DeleteCondoProps) => {
 
   return (
     <>
-      <DialogContent className="sm:max-w-[450px] h-[130px]">
+      <DialogContent className="sm:max-w-[470px] h-[130px]">
         <DialogHeader>
           <DialogTitle>
-            Tem certeza que deseja remover {razaoSocial}?
+            Tem certeza que deseja remover a unidade {unidade}?
           </DialogTitle>
         </DialogHeader>
-        <form className="space-y-4" onSubmit={deleteCondo}>
+        <form className="space-y-4" onSubmit={deleteUnit}>
           <DialogFooter>
             <Button className="w-full" type="submit" variant="destructive">
               {submitting ? <ReloadIcon className="animate-spin" /> : "Sim"}

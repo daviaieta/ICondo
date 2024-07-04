@@ -3,10 +3,8 @@ import { UnitController } from '../controller/unit.controller'
 
 const router = express.Router()
 
-router.get('/', UnitController.listUnits)
-
-router.post('/create', UnitController.createUnit)
-
-router.post('/delete/:id', UnitController.deleteUnit)
+router.get('/', UnitController.list)
+router.post('/create', UnitController.create)
+router.post('/delete', UnitController.delete)
 
 export default router

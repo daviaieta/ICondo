@@ -4,4 +4,5 @@ export type UnitProps = {
   unidade: string;
   tipo: string;
   condominioId: number;
+  createdAt: number;
 };

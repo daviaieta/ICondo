@@ -37,6 +37,8 @@ import { Update as UpdateCondo } from "./update-condo";
 import { CondoProps } from "../types";
 import { fetchAdapter } from "@/adapters/fetchAdapter";
 import { useToast } from "@/components/ui/use-toast";
+import { formatRelative } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export const List = () => {
   const [condos, setCondos] = useState<CondoProps[]>([]);
@@ -93,8 +95,6 @@ export const List = () => {
   useEffect(() => {
     fetchCondos();
   }, []);
-
-  console.log(condos);
 
   const filteredCondo = condos.filter((condo) =>
     condo.razao_social.toLowerCase().includes(search.toLowerCase())
@@ -162,14 +162,14 @@ export const List = () => {
                     Logradouro
                   </TableHead>
                   <TableHead className="hidden md:table-cell">Bairro</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Número de Endereço
-                  </TableHead>
                   <TableHead className="hidden md:table-cell">CEP</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Telefone
+                    Contato
                   </TableHead>
-                  <TableHead className="hidden md:table-cell">CNPJ</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Data de Criação
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -188,24 +188,15 @@ export const List = () => {
                       {condo.bairro}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <Badge className="text-xs" variant="secondary">
-                        {condo.numero_endereco}
-                      </Badge>
+                      {condo.cep}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <Badge className="text-xs" variant="secondary">
-                        {condo.cep}
-                      </Badge>
+                      {condo.telefone}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <Badge className="text-xs" variant="secondary">
-                        {condo.telefone}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Badge className="text-xs" variant="secondary">
-                        {condo.cnpj}
-                      </Badge>
+                      {formatRelative(condo.createdAt, new Date(), {
+                        locale: ptBR,
+                      })}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       <DropdownMenu>

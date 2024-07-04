@@ -36,6 +36,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { Delete } from "./delete-unit";
 
 export const List = () => {
   const [units, setUnits] = useState<UnitProps[]>([]);
@@ -66,10 +67,8 @@ export const List = () => {
     fetchUnits();
   }, []);
 
-  const filteredUnit = units.filter(
-    (unit) =>
-      unit.condominioId &&
-      unit.condominioId.toString().includes(search.toLowerCase())
+  const filteredUnit = units.filter((unit) =>
+    unit.unidade.toString().includes(search.toLowerCase())
   );
 
   return (
@@ -99,7 +98,7 @@ export const List = () => {
               <Button size="sm" variant="outline" className="h-7 gap-1.5">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Add Condomínio
+                  Add Unidade
                 </span>
               </Button>
             </SheetTrigger>
@@ -168,6 +167,11 @@ export const List = () => {
                             <DialogTrigger asChild>
                               <Button variant="ghost">Excluir</Button>
                             </DialogTrigger>
+                            <Delete
+                              id={Number(unit.id)}
+                              unidade={unit.unidade}
+                              setUnits={setUnits}
+                            ></Delete>
                           </Dialog>
                         </DropdownMenuContent>
                       </DropdownMenu>

@@ -7,7 +7,7 @@ export class CondoController {
   static async list(req: Request, res: Response) {
     try {
       const condos = await prisma.condominio.findMany({})
-      return res.status(200).json(condos)
+      return res.send(condos)
     } catch (error) {
       return res.status(400).json(error)
     }
@@ -19,9 +19,9 @@ export class CondoController {
       const createdCondo = await prisma.condominio.create({
         data: condo,
       })
+
       return res.send(createdCondo)
     } catch (error) {
-      console.log(error)
       return res.status(400).json({ error })
     }
   }
@@ -29,10 +29,11 @@ export class CondoController {
   static async delete(req: Request, res: Response) {
     try {
       const condoId = req.body.id
-      await prisma.condominio.delete({
+      const deletedCondo = await prisma.condominio.delete({
         where: { id: condoId },
       })
-      return res.status(200).json({})
+
+      return res.send(deletedCondo)
     } catch (error) {
       return res.status(400).json({ error })
     }
@@ -41,13 +42,12 @@ export class CondoController {
   static async update(req: Request, res: Response) {
     try {
       const condo = req.body
-
       const updatedCondo = await prisma.condominio.update({
         where: { id: condo.id },
         data: condo,
       })
 
-      return res.status(200).json(updatedCondo)
+      return res.send(updatedCondo)
     } catch (error) {
       return res.status(400).json({ error })
     }
