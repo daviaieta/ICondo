@@ -145,11 +145,27 @@ export const NavBar = ({ children }: { children: React.ReactNode }) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Configurações</DropdownMenuItem>
-              <DropdownMenuItem>Suporte</DropdownMenuItem>
+              <Link href="/settings" passHref>
+                <DropdownMenuItem asChild>
+                  <a>Configurações</a>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/support" passHref>
+                <DropdownMenuItem asChild>
+                  <a>Suporte</a>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Login</DropdownMenuItem>
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <Link href="/auth/login" passHref>
+                <DropdownMenuItem asChild>
+                  <a>Entrar</a>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/logout" passHref>
+                <DropdownMenuItem asChild>
+                  <a>Sair</a>
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

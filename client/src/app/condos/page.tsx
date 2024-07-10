@@ -1,5 +1,11 @@
-import { List as ListCondos } from "./_components/list-condo";
+// Page.js
+import { List as ListCondo } from "./_components/list-condo";
+import { NavBar } from "../../components/navbar";
 
 export default function Page() {
-  return <ListCondos />;
+  return (
+    <NavBar>
+      <ListCondo />
+    </NavBar>
+  );
 }

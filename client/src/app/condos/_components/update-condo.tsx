@@ -125,11 +125,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
         <form className="space-y-4" onSubmit={updateCondo}>
           <div className="grid gap-4 py-6">
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="razao_social" className="text-right">
                 Razão Social
               </Label>
               <Input
-                id="name"
+                id="razao_social"
                 className="col-span-3"
                 value={razaoSocial}
                 onChange={(e) => {
@@ -139,11 +139,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="logradouro" className="text-right">
                 Logradouro
               </Label>
               <Input
-                id="name"
+                id="logradouro"
                 className="col-span-3"
                 value={logradouro}
                 onChange={(e) => {
@@ -153,11 +153,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="numero" className="text-right">
                 Número
               </Label>
               <Input
-                id="name"
+                id="numero"
                 className="col-span-3"
                 value={numeroEndereco}
                 onChange={(e) => {
@@ -167,11 +167,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="complemento" className="text-right">
                 Complemento
               </Label>
               <Input
-                id="name"
+                id="complemento"
                 className="col-span-3"
                 value={complemento}
                 onChange={(e) => {
@@ -181,11 +181,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="bairro" className="text-right">
                 Bairro
               </Label>
               <Input
-                id="name"
+                id="bairro"
                 className="col-span-3"
                 value={bairro}
                 onChange={(e) => {
@@ -195,11 +195,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="localidade" className="text-right">
                 Localidade
               </Label>
               <Input
-                id="name"
+                id="localidade"
                 className="col-span-3"
                 value={localidade}
                 onChange={(e) => {
@@ -250,11 +250,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               </Select>
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="cep" className="text-right">
                 CEP
               </Label>
               <Input
-                id="name"
+                id="cep"
                 className="col-span-3"
                 value={cep}
                 onChange={(e) => {
@@ -264,11 +264,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="telefone" className="text-right">
                 Telefone
               </Label>
               <Input
-                id="name"
+                id="telefone"
                 className="col-span-3"
                 value={telefone}
                 onChange={(e) => {
@@ -278,11 +278,11 @@ export const Update: React.FC<Condo> = ({ condo, setCondos }) => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="cnpj" className="text-right">
                 CNPJ
               </Label>
               <Input
-                id="name"
+                id="cnpj"
                 className="col-span-3"
                 value={cnpj}
                 onChange={(e) => {

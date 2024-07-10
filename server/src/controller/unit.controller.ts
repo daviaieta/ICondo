@@ -24,6 +24,20 @@ export class UnitController {
     }
   }
 
+  static async update(req: Request, res: Response) {
+    try {
+      const unit = req.body
+      const updatedUnit = await prisma.unidade.update({
+        where: { id: unit.id },
+        data: unit,
+      })
+
+      return res.send(updatedUnit)
+    } catch (error) {
+      return res.status(400).json({ error })
+    }
+  }
+
   static async delete(req: Request, res: Response) {
     try {
       const unitId = req.body.id

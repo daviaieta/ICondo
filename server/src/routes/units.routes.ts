@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.get('/', UnitController.list)
 router.post('/create', UnitController.create)
+router.post('/update', UnitController.update)
 router.post('/delete', UnitController.delete)
 
 export default router
