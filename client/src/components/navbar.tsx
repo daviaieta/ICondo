@@ -59,7 +59,7 @@ export const NavBar = ({ children }: { children: React.ReactNode }) => {
                 Unidades
               </Link>
               <Link
-                href="#"
+                href="/users"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <Users className="h-4 w-4" />
@@ -117,7 +117,7 @@ export const NavBar = ({ children }: { children: React.ReactNode }) => {
                   Unidades
                 </Link>
                 <Link
-                  href="#"
+                  href="/users"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                 >
                   <Users className="h-4 w-4" />

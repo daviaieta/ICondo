@@ -6,6 +6,52 @@ import { prisma } from '../lib/prisma'
 const helper = new Helper()
 
 export class AuthController {
+  static async auth(req: Request, res: Response) {
+    return res.status(200).json({})
+  }
+  static async login(req: Request, res: Response) {
+    try {
+      const { cpf, password } = req.body
+
+      if (!cpf || !password) {
+        return res.status(400).send({
+          error: 'CPF and password are required',
+        })
+      }
+
+      const user = await prisma.user.findUnique({
+        where: {
+          cpf,
+        },
+      })
+
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' })
+      }
+
+      const passwordMatch = helper.comparePassword(password, user.senha)
+
+      if (!passwordMatch) {
+        return res.status(401).send({
+          error: 'Incorrect password',
+        })
+      }
+
+      const token = jwt.sign({ id: user.id }, '123', { expiresIn: '24h' })
+      const cleanToken = token.replace(/\//g, '')
+
+      const updatedUser = await prisma.user.update({
+        where: { cpf },
+        data: { token: cleanToken },
+        select: { token: true },
+      })
+
+      res.send(updatedUser)
+    } catch (error) {
+      return res.status(400).json({ error })
+    }
+  }
+
   static async finishRegistration(req: Request, res: Response) {
     try {
       const token = req.params.token
@@ -24,34 +70,6 @@ export class AuthController {
           // person.setDataValue('token', null)
 
           return res.status(200).json({ person })
-        }
-      }
-    } catch (error) {
-      return res.status(400).json({ error })
-    }
-  }
-
-  static async login(req: Request, res: Response) {
-    try {
-      const { email, senha } = req.body
-      const user = await prisma.user.findUnique({ where: email })
-
-      if (user) {
-        if ((await helper.comparePassword(user.senha, senha)) && user.email == email) {
-          const tokenData = {
-            id: user.id,
-          }
-          const token = jwt.sign(tokenData, '123', { expiresIn: '24h' })
-          res.cookie('jwt', token, { httpOnly: true })
-
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { token },
-          })
-
-          return res.status(200).json({ user })
-        } else {
-          return res.status(404).json({ message: 'user not found' })
         }
       }
     } catch (error) {

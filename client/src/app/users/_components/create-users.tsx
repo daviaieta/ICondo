@@ -1,8 +1,17 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
+import { UserProps } from "../types";
+import {
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -12,34 +21,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
 import { fetchAdapter } from "@/adapters/fetchAdapter";
-import {
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { UnitProps } from "../types";
+import { toast } from "@/components/ui/use-toast";
+
+export type User = {
+  setUsers: Dispatch<SetStateAction<UserProps[]>>;
+};
 
 export type Condo = {
   id: number;
   razao_social: string;
 };
 
-export type Units = {
-  setUnits: Dispatch<SetStateAction<UnitProps[]>>;
-};
-
-export const Create = ({ setUnits }: Units) => {
-  const [bloco, setBloco] = useState("");
-  const [unidade, setUnidade] = useState("");
-  const [tipo, setTipo] = useState("");
+export const Create = ({ setUsers }: User) => {
+  const [name, setName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [cargo, setCargo] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [condo, setCondo] = useState("");
   const [condos, setCondos] = useState<Condo[]>([]);
   const [submitting, setSubmitting] = useState(false);
-  const { toast } = useToast();
 
   const fetchCondos = async () => {
     try {
@@ -58,32 +61,35 @@ export const Create = ({ setUnits }: Units) => {
     }
   };
 
-  const createUnit = async (e: any) => {
+  const createUser = async (e: any) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
       const response = await fetchAdapter({
         method: "POST",
-        path: "units/create",
+        path: "users/create",
         body: {
-          bloco,
-          unidade,
-          tipo,
+          name,
+          cpf,
+          dataNascimento,
+          cargo,
+          email,
+          password,
           condominioId: Number(condo),
         },
       });
       if (response.status == 200) {
         console.log(response.data);
         toast({
-          title: "Unidade adiconada com sucesso",
+          title: `${name} adiconado(a) com sucesso`,
         });
-        setUnits((prevUnits) => [...prevUnits, response.data]);
+        setUsers((prevUsers) => [...prevUsers, response.data]);
       }
     } catch (error) {
       toast({
         title: `Erro`,
-        description: `Ocorreu um erro ao cadastrar a unidade, por favor contatar o suporte`,
+        description: `Ocorreu um erro ao registrar o(a) ${name}, por favor contatar o suporte`,
       });
     } finally {
       setSubmitting(false);
@@ -98,61 +104,99 @@ export const Create = ({ setUnits }: Units) => {
     <>
       <SheetContent className="sm:max-w-[425px]">
         <SheetHeader>
-          <SheetTitle>Adicionar nova unidade</SheetTitle>
+          <SheetTitle>Adicionar novo usuário</SheetTitle>
           <SheetDescription>
-            Preencha os campos abaixo para criar adicionar uma nova unidade no
-            sistema
+            Preencha os campos abaixo para adicionar um novo usuário no sistema
           </SheetDescription>
         </SheetHeader>
-        <form className="space-y-4" onSubmit={createUnit}>
+        <form className="space-y-4" onSubmit={createUser}>
           <div className="grid gap-4 py-6">
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                Bloco
+              <Label htmlFor="nome" className="text-right">
+                Nome
               </Label>
               <Input
-                id="name"
+                id="nome"
                 className="col-span-3"
-                value={bloco}
+                value={name}
                 onChange={(e) => {
-                  setBloco(e.target.value);
+                  setName(e.target.value);
                 }}
                 required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                Unidade
+              <Label htmlFor="cpf" className="text-right">
+                CPF
               </Label>
               <Input
-                id="name"
+                id="cpf"
                 className="col-span-3"
-                value={unidade}
+                value={cpf}
                 onChange={(e) => {
-                  setUnidade(e.target.value);
+                  setCpf(e.target.value);
                 }}
                 required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
-              <Label htmlFor="name" className="text-right">
-                Tipo
+              <Label htmlFor="data_nascimento" className="text-right">
+                Nascimento
               </Label>
-              <Select onValueChange={setTipo}>
+              <Input
+                id="data_nascimento"
+                className="col-span-3"
+                value={dataNascimento}
+                placeholder="mm/dd/yyyy"
+                onChange={(e) => {
+                  setDataNascimento(e.target.value);
+                }}
+                required
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="cargo" className="text-right">
+                Cargo
+              </Label>
+              <Select onValueChange={setCargo}>
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Selecione um tipo" />
+                  <SelectValue placeholder="Selecione o cargo" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="casa">Casa</SelectItem>
-                    <SelectItem value="apartamento">Apartamento</SelectItem>
-                    <SelectItem value="cobertura">Cobertura</SelectItem>
-                    <SelectItem value="quarto">Quarto</SelectItem>
-                    <SelectItem value="sala">Sala</SelectItem>
-                    <SelectItem value="outro">Outro</SelectItem>
+                    <SelectItem value="ADMIN">Administrador</SelectItem>
+                    <SelectItem value="OPERADOR">Operador</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="email" className="text-right">
+                E-mail
+              </Label>
+              <Input
+                id="logradouro"
+                className="col-span-3"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                required
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Label htmlFor="senha" className="text-right">
+                Senha
+              </Label>
+              <Input
+                id="password"
+                className="col-span-3"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                required
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="name" className="text-right">
@@ -181,7 +225,11 @@ export const Create = ({ setUnits }: Units) => {
               variant="outline"
               disabled={submitting}
             >
-              {submitting ? "Loading..." : "Cadastrar"}
+              {submitting ? (
+                <ReloadIcon className="animate-spin" />
+              ) : (
+                "Cadastrar"
+              )}
             </Button>
           </SheetFooter>
         </form>

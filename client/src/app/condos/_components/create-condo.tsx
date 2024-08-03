@@ -62,8 +62,8 @@ export const Create = ({ setCondos }: Condo) => {
           cnpj,
         },
       });
-      console.log(response.data);
       if (response.status == 200) {
+        console.log(response.data);
         toast({
           title: "Condomínio adiconado com sucesso",
           description: `Razão social: ${razaoSocial}`,

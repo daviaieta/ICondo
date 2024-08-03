@@ -22,6 +22,7 @@ model Condominio {
   createdAt       DateTime @default(now())
 
   units Unidade[]
+  users User[]
 }
 
 model Unidade {
@@ -34,12 +35,10 @@ model Unidade {
   Condominio   Condominio @relation(fields: [condominioId], references: [id])
   condominioId Int
 
-  users     User[]
   Encomenda Encomenda[]
 }
 
 enum UserRole {
-  USER
   ADMIN
   OPERADOR
 }
@@ -48,16 +47,15 @@ model User {
   id              Int      @id @default(autoincrement())
   nome            String
   cpf             String   @unique
-  data_nascimento DateTime
+  data_nascimento String
   email           String   @unique
-  primeiro_acesso String
   senha           String
   token           String   @unique
-  cargo           UserRole @default(USER)
+  cargo           UserRole
   createdAt       DateTime @default(now())
 
-  Unidade   Unidade @relation(fields: [unidadeId], references: [id])
-  unidadeId Int
+  Condominio   Condominio @relation(fields: [condominioId], references: [id])
+  condominioId Int
 }
 
 model Encomenda {

@@ -59,7 +59,7 @@ export const List = () => {
     } catch (error) {
       toast({
         title: `Erro`,
-        description: `Ocorreu um erro ao carregar os condomínios, por favor contatar o suporte`,
+        description: `Ocorreu um erro ao carregar os usuários, por favor contatar o suporte`,
       });
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export const List = () => {
     try {
       const response = await fetchAdapter({
         method: "GET",
-        path: "condos/export-csv",
+        path: "users/export-csv",
       });
       if (response.status == 200) {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -97,7 +97,7 @@ export const List = () => {
   }, []);
 
   const filteredUsers = users.filter((user) =>
-    user.nome.toLowerCase().includes(search.toLowerCase())
+    user.nome?.includes(search.toLowerCase())
   );
 
   return (
@@ -108,7 +108,7 @@ export const List = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Buscar condomínios..."
+              placeholder="Buscar usuários..."
               className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -132,40 +132,37 @@ export const List = () => {
               <Button size="sm" variant="outline" className="h-7 gap-1.5">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Add Condomínio
+                  Add Usuário
                 </span>
               </Button>
             </SheetTrigger>
-            <CreateUser setUsers={setCondos} />
+            <CreateUser setUsers={setUsers} />
           </Sheet>
         </div>
       </div>
 
       <Card>
         <CardHeader className="px-7">
-          <CardTitle>Condomínios</CardTitle>
-          <CardDescription>
-            Condomínios adicionados recentemente.
-          </CardDescription>
+          <CardTitle>Usuários</CardTitle>
+          <CardDescription>Usuários adicionados recentemente.</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <ReloadIcon className="animate-spin" />
-          ) : filteredCondo.length > 0 ? (
+          ) : filteredUsers.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="hidden sm:table-cell">
-                    Razão Social
-                  </TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Logradouro
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">Bairro</TableHead>
-                  <TableHead className="hidden md:table-cell">CEP</TableHead>
+                  <TableHead className="hidden sm:table-cell">Nome</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Contato
+                    Data de Nascimento
                   </TableHead>
+                  <TableHead className="hidden md:table-cell">E-mail</TableHead>
+                  <TableHead className="hidden md:table-cell">Cargo</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Condomínio
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell">Senha</TableHead>
                   <TableHead className="hidden md:table-cell">
                     Data de Criação
                   </TableHead>
@@ -173,33 +170,36 @@ export const List = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCondo.map((condo) => (
-                  <TableRow key={condo.id}>
+                {filteredUsers.map((user) => (
+                  <TableRow key={user.id}>
                     <TableCell>
-                      <div className="font-medium">{condo.razao_social}</div>
+                      <div className="font-medium">{user.nome}</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
-                        {condo.localidade}
+                        {user.cpf}
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {condo.logradouro}
+                      {user.data_nascimento}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {condo.bairro}
+                      {user.email}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {condo.cep}
+                      {user.cargo}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {condo.telefone}
+                      {user.condominioId}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {formatRelative(condo.createdAt, new Date(), {
+                      {user.senha}
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {formatRelative(user.createdAt, new Date(), {
                         locale: ptBR,
                       })}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <DropdownMenu>
+                      {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
                             <span className="sr-only ">Open menu</span>
@@ -227,14 +227,14 @@ export const List = () => {
                             />
                           </Dialog>
                         </DropdownMenuContent>
-                      </DropdownMenu>
+                      </DropdownMenu> */}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           ) : (
-            <p>Nenhum condomínio encontrado.</p>
+            <p>Nenhum usuário encontrado.</p>
           )}
         </CardContent>
       </Card>
